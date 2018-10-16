@@ -13,9 +13,9 @@ public class DetectingZone {
 	    this.posY = posY;
 	    this.size = size;
 	    this.app = app;
-	    r = 210;
-	    g = 10;
-	    b = 10;
+	    r = 240;
+	    g = 240;
+	    b = 240;
 	    state = 0;
 	  }
 

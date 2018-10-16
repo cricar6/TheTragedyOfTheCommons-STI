@@ -23,8 +23,8 @@ public class MainApp extends PApplet {
 	
 	@Override 
 	public void draw() {
-		background (255);
-		//smooth();
+		background (184,188,188);
+		smooth();
 		world.display();
 	}
 	
@@ -38,5 +38,8 @@ public class MainApp extends PApplet {
 		world.clicked();
 	}
 	
+	public void keyPressed() {
+		world.kpress();
+	}
 	
 }
