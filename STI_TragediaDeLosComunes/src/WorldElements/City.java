@@ -10,6 +10,7 @@ public class City {
 	
 	private ArrayList<Square> squares;
 	int cols, rows, size;
+	int stateSelected;
 
 	
 	public City (int cols, int rows, int size, PApplet app) {
@@ -60,10 +61,14 @@ public class City {
 	
 	public void clicked () {
 		
+		
+		
 	    for (int i = 0; i< squares.size(); i++) {
 	        Square square = squares.get (i);
+	        square.setStateSelected(stateSelected);
 
 	        square.clicked();
+	        
 	      }
 	    Collections.sort(squares, new Comparator <Square> () {
 
@@ -77,4 +82,14 @@ public class City {
 	    	
 	    });
 	}
+
+	public int getStateSelected() {
+		return stateSelected;
+	}
+
+	public void setStateSelected(int stateSelected) {
+		this.stateSelected = stateSelected;
+	}
+	
+	
 }

@@ -13,6 +13,8 @@ public class Square {
 	  private PImage [] states;
 	  private DetectingZone detectZone;
 	  
+	  int stateSelected;
+	  
 	  public Square ( int posX, int posY, int size, PApplet app) {
 		    this.posX = posX;
 		    this.posY = posY;
@@ -86,11 +88,22 @@ public class Square {
 		  }
 
 		  void clicked () {
+			  detectZone.setStateSelected(stateSelected);
 			  detectZone.clicked();
 		  }
 
 		  public int getPosY() {
 		    return posY;
 		  }
+
+		public int getStateSelected() {
+			return stateSelected;
+		}
+
+		public void setStateSelected(int stateSelected) {
+			this.stateSelected = stateSelected;
+		}
+		  
+		  
 		  
 }

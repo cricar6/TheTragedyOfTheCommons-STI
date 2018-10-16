@@ -52,6 +52,7 @@ public class Energy {
 		app.fill(37, 57,73);
 		app.rect(posX, posY, size, size, 15);
 		app.image(energy, posX, posY, size, size);
+		app.tint(255,255);
 
 
 	}

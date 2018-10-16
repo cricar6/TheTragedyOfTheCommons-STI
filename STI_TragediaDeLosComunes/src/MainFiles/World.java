@@ -1,6 +1,9 @@
 package MainFiles;
 
+import InterfaceElements.AddElements;
+import InterfaceElements.AddNewElement;
 import InterfaceElements.Energy;
+import InterfaceElements.HappyBar;
 import InterfaceElements.Indicator;
 import InterfaceElements.Season;
 import InterfaceElements.Timer;
@@ -18,7 +21,7 @@ public class World {
 	private int size;
 	private City city; // Square Grid
 	PApplet app;
-	private PFont avenir;
+	private PFont teko, bebas, brush;
 
 	float zoom = 0;
 	boolean startZoom = false;
@@ -44,12 +47,17 @@ public class World {
 	private Indicator energyForUse;
 	private Season season;
 	private Energy energy;
+	private AddNewElement add;
+	private HappyBar happy;
 	private Timer timer;
 	private boolean restartTimer;
+	private int stateSelected;
 	
 	public World(PApplet app) {
 		this.app = app;
-		avenir = app.createFont("./resources/fonts/Teko-Regular.ttf", 20);
+		teko = app.createFont("./resources/fonts/teko-regular.otf", 120);
+		bebas = app.createFont("./resources/fonts/BebasNeue-Regular.otf", 120);
+		brush = app.createFont("./resources/fonts/Brush-Script.ttf", 120);
 
 		screen = 0;
 
@@ -73,8 +81,13 @@ public class World {
 		people = new Indicator(100, 60, 0+ "" ,"POBLACIÓN" , app);
 		energyForUse = new Indicator(300, 60, 0+ "" ,"DEMANDA" ,app);
 
+		add = new AddNewElement(app.width-100, app.height-100, app);
+		stateSelected = 0;
+		
 		season = new Season(app.width-150, 60, 0, app);
 		energy = new Energy(app.width-75, 170, app);
+		
+		happy = new HappyBar(100, app.height-100, app);
 		
 		timer = new Timer();
 		Thread t = new Thread(timer);
@@ -139,29 +152,64 @@ public class World {
 				backx2 = -app.width*2;
 			}
 			
-			app.image(logo, app.width -70, 100, 140 , 200);
+			app.image(logo, app.width/2 ,  app.height/2, 180 , 240);
 			
 			app.fill(255);
-			app.textFont(avenir);
+			app.textFont(teko);
 			app.textAlign(app.CENTER);
 			app.textLeading(20);
-			app.text("Presiona cualquier tecla para continuar", app.width/2, app.height/2, 200, 80 );
+			app.textSize(30);
+			app.text("Presiona ENTER para continuar", app.width/2, app.height , 400, 70 );
 			
 			break;
 		case 1: 
 			app.textAlign(app.CENTER);
-			app.fill(0);
-			app.text("¡Bienvenido!", app.width/2, app.height/2-100, app.width, 100);
-			app.text("Antes de empezar nos gustaría que firmaras algunos papeles. Ya sabes, cosas de protocolo. Cuéntanos ¿cómo se llamará tu ciudad?", app.width/2, app.height/2, 500, 200);
-			app.text(cityName, app.width/2, app.height/2+200, 400, 100);
+			app.tint(37,57,23);
+			app.image(logo, app.width/2, 120, 120 , 180);
+			app.tint(255);
+
+			app.fill(37,57,73);
+			app.textFont(bebas);
 			
+			app.textSize(80);
+			app.text("¡Bienvenido!", app.width/2, app.height/2-100, app.width, 100);
+			
+			
+			app.textFont(teko);
+			app.textSize(30);
+			app.fill(56,88,109);
+
+			app.text("Antes de empezar nos gustaría que firmaras algunos papeles. Ya sabes, cosas de protocolo. Cuéntanos ¿cómo se llamará tu ciudad?", app.width/2, app.height/2+70, 700, 200);
+			
+			app.textSize(30);
+			app.textFont(brush);
+			app.text(cityName, app.width/2, app.height/2+250, app.width, 400);
+			app.line(app.width/2-500, app.height/2+170, app.width/2+500, app.height/2+170);
 			break;
 		case 2:
-			app.fill(0);
 			app.textAlign(app.CENTER);
-			app.text(ip, app.width/2-50, app.height/2, 100, 40);
-			if (ip.equals("abcd")) System.out.println("ip accepted");;
-			break;
+			app.tint(37,57,23);
+			app.image(logo, app.width/2, 120, 120 , 180);
+			app.tint(255);
+
+			app.fill(37,57,73);
+			app.textFont(bebas);
+			
+			app.textSize(80);
+			app.text("Dirección", app.width/2, app.height/2-100, app.width, 100);
+			
+			
+			app.textFont(teko);
+			app.textSize(30);
+			app.fill(56,88,109);
+
+			app.text("Un paso más... ¿Dónde te ubicarás? Puedes encontrar la dirección de tu nueva ciudad en la pantalla del monitor principal.", app.width/2, app.height/2+70, 700, 200);
+			
+			app.textSize(50);
+			app.text(ip, app.width/2, app.height/2+310, app.width, 400);
+			app.line(app.width/2-500, app.height/2+170, app.width/2+500, app.height/2+170);
+
+						break;
 		case 3: 
 			//Interface display
 			city.display();
@@ -169,7 +217,8 @@ public class World {
 			energyForUse.display();
 			season.display();
 			energy.display();
-			
+			add.display();
+			happy.display();
 			//Timer logic
 			if (restartTimer == true) {
 				timer.restart();
@@ -180,9 +229,9 @@ public class World {
 			app.fill(37,57,73);
 			app.textSize(50);
 			
-			app.text(20 - timer.getS(), app.width/2, 70);
+			app.text(60 - timer.getS(), app.width/2, 70);
 			
-			if (20-timer.getS() == 0)restartTimer = true;
+			if (60-timer.getS() == 0)restartTimer = true;
 			
 			timer.setStop(false);
 
@@ -226,6 +275,7 @@ public class World {
 		if (screen == 3) {
 			city.moved();
 			energy.moved();
+			happy.moved();
 		}
 	}
 
@@ -234,9 +284,26 @@ public class World {
 			screen++;
 		}
 		if (screen == 3) {
+			
+			add.clicked();
+			city.setStateSelected(add.getStateSelected());
+			
 			city.clicked();	
 			energy.clicked();
+
 		}
+	}
+	
+	public void dragged () {
+		happy.dragged();
+
+	}
+	public void released () {
+		if (screen == 3) {
+
+			happy.released();
+		}
+
 	}
 
 }

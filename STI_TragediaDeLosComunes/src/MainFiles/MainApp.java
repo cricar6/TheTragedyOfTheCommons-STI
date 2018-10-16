@@ -38,8 +38,17 @@ public class MainApp extends PApplet {
 		world.clicked();
 	}
 	
+	@Override
+	public void mouseReleased() {
+		world.released();
+	}
+	
+	public void mouseDragged () {
+		world.dragged();
+	}
 	public void keyPressed() {
 		world.kpress();
 	}
 	
+
 }

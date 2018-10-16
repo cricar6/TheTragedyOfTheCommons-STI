@@ -19,7 +19,7 @@ public class Indicator {
 		this.indexation = indexation;
 		this.kind = kind;
 		
-		avenir = app.createFont("./resources/fonts/Teko-Regular.ttf", 20);
+		avenir = app.createFont("./resources/fonts/teko-regular.otf", 120);
 
 		imageSize = 70;
 		barSizeX = 55;
