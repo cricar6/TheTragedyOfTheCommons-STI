@@ -9,9 +9,9 @@ import processing.core.PApplet;
 public class City {
 	
 	private ArrayList<Square> squares;
-	int cols, rows, size;
-	int stateSelected;
-
+	private int cols, rows, size;
+	private int stateSelected;
+	private int energyCanUse, finalEnergy;
 	
 	public City (int cols, int rows, int size, PApplet app) {
 	    boolean contador = false;
@@ -21,6 +21,8 @@ public class City {
 		this.size = size;
 		
 	    squares = new ArrayList <Square>();
+	    energyCanUse = 0;
+	    finalEnergy = 0;
 	    
 	    for (int i= 0; i< cols; i++) {
 	        for (int j= 0; j< rows; j++) {
@@ -41,10 +43,15 @@ public class City {
 	}
 	
 	public void display () {
+
 	    for (int i = 0; i< squares.size(); i++) {
 	        Square square = squares.get (i);
 	        square.display();
-	      }
+	        square.setEnergyCanUse(energyCanUse);
+	        if (square.getEnergyCanUse() != square.getFinalEnergy()) {
+	        	finalEnergy = square.getFinalEnergy();
+	        }
+	    }
 
 
 		
@@ -89,6 +96,22 @@ public class City {
 
 	public void setStateSelected(int stateSelected) {
 		this.stateSelected = stateSelected;
+	}
+
+	public int getEnergyCanUse() {
+		return energyCanUse;
+	}
+
+	public void setEnergyCanUse(int energyCanUse) {
+		this.energyCanUse = energyCanUse;
+	}
+
+	public int getFinalEnergy() {
+		return finalEnergy;
+	}
+
+	public void setFinalEnergy(int finalEnergy) {
+		this.finalEnergy = finalEnergy;
 	}
 	
 	

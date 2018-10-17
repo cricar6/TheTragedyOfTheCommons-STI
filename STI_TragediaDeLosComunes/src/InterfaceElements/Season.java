@@ -13,11 +13,11 @@ public class Season {
 	private int seasonSelected;
 	private ArrayList<SeasonElement> elements;
 
-	public Season (int posX, int posY, int season, PApplet app) {
+	public Season (int posX, int posY, int seasonSelected, PApplet app) {
 		this.app = app;
 		this.posX = posX;
 		this.posY = posY;
-		this.seasonSelected = season;
+		this.seasonSelected = seasonSelected;
 		
 		elementSize = 50;
 		sizeX = elementSize*4+20;
@@ -30,7 +30,7 @@ public class Season {
 		elements.add(new SeasonElement(+elementSize/2, elementSize/2, elementSize, 3, app));
 		elements.add(new SeasonElement(+elementSize+ (elementSize/2), elementSize/2, elementSize, 4, app));
 		
-		seasonSelected = 3;
+		seasonSelected = seasonSelected;
 	}
 	
 	public void display() {

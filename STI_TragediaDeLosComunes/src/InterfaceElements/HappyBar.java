@@ -8,7 +8,6 @@ public class HappyBar {
 	private int posX, posY;
 	private int size;
 	private PFont bebas;
-	private boolean activated;
 	private SlideBar slide;
 	private int indexator;
 
@@ -21,12 +20,11 @@ public class HappyBar {
 		bebas = app.createFont("./resources/fonts/BebasNeue-Regular.otf", 120);
 
 		size = 136;
-		
+
 		int postemX = posX;
 		int postemY = posY + 55;
-		slide = new SlideBar(postemX, postemY, app);
-		activated = false;
-		
+		slide = new SlideBar(postemX, postemY, 50, app);
+
 		indexator = 0;
 	}
 
@@ -53,35 +51,33 @@ public class HappyBar {
 
 		app.rect(posX, posY + 55, size, 45, 15);
 
-		
 		slide.display();
-		indexator = app.width/app.mouseX;
-		if (activated==true) {
-			app.fill(255);
-			app.textSize(25);
-			app.text("+" + indexator, slide.getPosXB(), posY+25);
-			slide.dragged();
-			
-		}
+		
+		indexator = slide.getIndexator();
+
 	}
 
 	public void dragged() {
-		if (app.dist(app.mouseX, app.mouseY, slide.getPosX(), slide.getPosY())<slide.getSize()) {
-			activated = true;
-			
-		}
-	}
-	
-	public void moved () {
-		slide.moved();
-	}
-	
-
-	
-
-	
-	public void released () {
-		activated = false;
+		slide.dragged();
 
 	}
+
+	public void moved() {
+			//slide.moved();
+		
+	}
+
+	public void released() {
+		slide.released();
+	}
+
+	public int getIndexator() {
+		return indexator;
+	}
+
+	public void setIndexator(int indexator) {
+		this.indexator = indexator;
+	}
+	
+	
 }

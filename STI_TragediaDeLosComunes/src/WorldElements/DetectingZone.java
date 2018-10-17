@@ -7,6 +7,8 @@ public class DetectingZone {
 	private PApplet app;
 	private int posX, posY, size, state, stateSelected;
 	private int g, b, r;
+	private int energyCanUse, finalEnergy;
+	private int housePrice, treePrice;
 
 	public DetectingZone(int posX, int posY, int size, PApplet app) {
 		this.posX = posX;
@@ -18,9 +20,15 @@ public class DetectingZone {
 		b = 240;
 		state = 0;
 		stateSelected = 0;
+		housePrice = 50;
+		treePrice = 50;
+		energyCanUse = 0;
+		
+		finalEnergy = 0;
 	}
 
 	public void display() {
+		
 		app.rect(0, 0, size, size);
 		app.noStroke();
 		app.fill(r, g, b);
@@ -51,6 +59,8 @@ public class DetectingZone {
 	public void clicked() {
 		if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
 			state= stateSelected;
+			
+			finalEnergy = energyCanUse - housePrice;
 		}
 	}
 
@@ -70,5 +80,20 @@ public class DetectingZone {
 		this.stateSelected = stateSelected;
 	}
 	
+	public int getEnergyCanUse() {
+		return energyCanUse;
+	}
+
+	public void setEnergyCanUse(int energyCanUse) {
+		this.energyCanUse = energyCanUse;
+	}
+
+	public int getFinalEnergy() {
+		return finalEnergy;
+	}
+
+	public void setFinalEnergy(int finalEnergy) {
+		this.finalEnergy = finalEnergy;
+	}
 	
 }

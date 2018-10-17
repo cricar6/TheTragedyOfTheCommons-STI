@@ -7,7 +7,7 @@ public class Indicator {
 	
 	private PApplet app;
 	private int posX, posY;
-	private int imageSize, barSizeX, barSizeY, diferenceBarImage;
+	private int imageSize, barSizeX, barSizeY, diferenceBarImage, indexator;
 	private String indexation, kind;
 	private PFont avenir;
 
@@ -25,6 +25,9 @@ public class Indicator {
 		barSizeX = 55;
 		diferenceBarImage = 40;
 		barSizeY = imageSize-diferenceBarImage;
+		indexator = 0;
+		
+		indexation = indexator +"";
 	}
 
 	public void display() {
@@ -62,4 +65,22 @@ public class Indicator {
 		// app.rectMode(app.CORNER);
 		app.popMatrix();
 	}
+
+	public String getIndexation() {
+		return indexation;
+	}
+
+	public void setIndexation(String indexation) {
+		this.indexation = indexation;
+	}
+
+	public int getIndexator() {
+		return indexator;
+	}
+
+	public void setIndexator(int indexator) {
+		this.indexator = indexator;
+	}
+	
+	
 }

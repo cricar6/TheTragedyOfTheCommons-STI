@@ -9,42 +9,58 @@ public class SlideBar {
 	private int posXB;
 
 	private int size;
-
+	private int indexator;
+	private boolean activated;
 	private int start, end;
 
-	public SlideBar(int posX, int posY, PApplet app) {
+	public SlideBar(int posX, int posY, int indexator, PApplet app) {
 		this.app = app;
 		this.posX = posX;
 		this.posY = posY;
-
-		start = -50;
-		end = 50;
+		this.indexator = indexator;
+		activated = false;
 		size = 25;
-		
-		posXB = posX-50;
+
+		posXB = posX;
 	}
 
 	public void display() {
+
+		indexator = ((app.mouseX) - posX) + 50;
+		if (indexator <= 0)
+			indexator = 0;
+		if (indexator >= 100)
+			indexator = 100;
+
 		app.fill(37, 57, 73);
 		app.rect(posX, posY, 100, 10, 10);
 		app.fill(81, 97, 109);
 		app.ellipse(posXB, posY, size, size);
+
+		if (activated == true) {
+			posXB = app.mouseX;
+			app.fill(255);
+			app.textSize(25);
+			app.text("+" + indexator, posXB, posY - 25);
+		}
 	}
-	
-	
-	
+
 	public void dragged() {
-		if (app.mouseX> posX-50 && app.mouseX<posX+50) {
-			if (app.dist(app.mouseX, app.mouseY, posXB, posY)<size) {
-				posXB=app.mouseX;
-				System.out.println("hi");
-	
-			}
-			
-		} 
+		if (app.mouseX > posX - 50 && app.mouseX < posX + 50) {
+			if (app.dist(app.mouseX, app.mouseY, posXB, posY) <= size) {
+				activated = true;
+
+			} 
+
+		}else {
+			activated = false;
+		}
 	}
-	
-	public void moved () {
+
+	public void released () {
+		activated = false;
+	}
+	public void moved() {
 
 	}
 
@@ -79,7 +95,14 @@ public class SlideBar {
 	public void setPosXB(int posXB) {
 		this.posXB = posXB;
 	}
-	
-	
 
+	public int getIndexator() {
+		return indexator;
+	}
+
+	public void setIndexator(int indexator) {
+		this.indexator = indexator;
+	}
+
+	
 }
