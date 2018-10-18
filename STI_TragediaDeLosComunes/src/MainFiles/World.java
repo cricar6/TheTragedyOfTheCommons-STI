@@ -46,6 +46,8 @@ public class World {
 	// Interface Objects
 	private Indicator people;
 	private Indicator energyForUse;
+	private Indicator totalEnergy;
+	
 	private Season seasonIndicator;
 	private Energy energyIndicator;
 	private AddNewElement add;
@@ -90,6 +92,8 @@ public class World {
 		// Logical variables
 		startEnergy = 100;
 		energyWasting = 0;
+		finalEnergy = 0;
+		
 		population = 0;
 		demand = 0;
 		happiness = 50;
@@ -106,7 +110,8 @@ public class World {
 		// Interface
 		people = new Indicator(100, 60, "POBLACI”N", app);
 		energyForUse = new Indicator(300, 60, "DEMANDA", app);
-
+		totalEnergy = new Indicator(500, 60, "ENERGÌA", app);
+		
 		add = new AddNewElement(app.width - 100, app.height - 100, app);
 
 		seasonIndicator = new Season(app.width - 150, 60, season, app);
@@ -152,6 +157,7 @@ public class World {
 
 		people.setIndexator(population);
 		energyForUse.setIndexator(demand);
+		totalEnergy.setIndexator(startEnergy);
 
 		happinessThisTurn = happy.getIndexator();
 		housePrice = happinessThisTurn;
@@ -278,6 +284,8 @@ public class World {
 
 			people.display();
 			energyForUse.display();
+			totalEnergy.display();
+			
 			seasonIndicator.display();
 			energyIndicator.display();
 			add.display();

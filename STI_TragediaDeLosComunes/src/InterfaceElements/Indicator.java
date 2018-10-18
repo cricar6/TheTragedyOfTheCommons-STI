@@ -37,28 +37,28 @@ public class Indicator {
 		app.translate(posX, posY);
 		app.ellipse(0, 0, 10, 10);
 		app.rectMode(app.CORNER);
-
-		app.fill(37,57,73);
+		
+		app.fill(211,215,219);
 		app.rect(-imageSize/2, (diferenceBarImage/2 - barSizeY/2)-10 , imageSize+barSizeX, barSizeY, 10);
 		app.rectMode(app.CENTER);
 
-		app.fill( 183,186,188);
-		app.stroke(37,57,73);
+		app.fill(26,41,51);
+		app.stroke(211,215,219);
 		app.strokeWeight(7);
 		app.ellipse(-imageSize/2, 0, imageSize, imageSize);
 
 		app.noStroke();
-		app.fill(211,215,219);
+		app.fill(37,57,73);
 		app.ellipse(-imageSize/2+5, 0, imageSize-10, imageSize);
 
 		
 		app.textAlign(app.CENTER);
-		app.fill(37,57,73);
+		app.fill(211,215,219);
 		app.textSize(50);
 		app.text(indexator + "", -imageSize/2, 15);
 		
 		app.textAlign(app.LEFT);
-		app.fill(211,215,219);
+		app.fill(37,57,73);
 		app.textSize(20);
 		app.text(kind, 10,16);
 
