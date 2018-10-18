@@ -8,15 +8,15 @@ public class Indicator {
 	private PApplet app;
 	private int posX, posY;
 	private int imageSize, barSizeX, barSizeY, diferenceBarImage, indexator;
-	private String indexation, kind;
+	private String kind;
 	private PFont avenir;
 
 
-	public Indicator(int posX, int posY,String indexation, String kind,  PApplet app) {
+	public Indicator(int posX, int posY, String kind,  PApplet app) {
 		this.app = app;
 		this.posX = posX;
 		this.posY = posY;
-		this.indexation = indexation;
+
 		this.kind = kind;
 		
 		avenir = app.createFont("./resources/fonts/teko-regular.otf", 120);
@@ -27,7 +27,7 @@ public class Indicator {
 		barSizeY = imageSize-diferenceBarImage;
 		indexator = 0;
 		
-		indexation = indexator +"";
+
 	}
 
 	public void display() {
@@ -55,7 +55,7 @@ public class Indicator {
 		app.textAlign(app.CENTER);
 		app.fill(37,57,73);
 		app.textSize(50);
-		app.text(indexation, -imageSize/2, 15);
+		app.text(indexator + "", -imageSize/2, 15);
 		
 		app.textAlign(app.LEFT);
 		app.fill(211,215,219);
@@ -66,13 +66,6 @@ public class Indicator {
 		app.popMatrix();
 	}
 
-	public String getIndexation() {
-		return indexation;
-	}
-
-	public void setIndexation(String indexation) {
-		this.indexation = indexation;
-	}
 
 	public int getIndexator() {
 		return indexator;

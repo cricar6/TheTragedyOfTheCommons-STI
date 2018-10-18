@@ -1,6 +1,8 @@
 package InterfaceElements;
 
 import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PShape;
 
 public class AddElements {
 
@@ -8,22 +10,36 @@ public class AddElements {
 	private int posX, posY;
 	private int size;
 	private int kind;
-	
-	
-	public AddElements (int posX, int posY, int size, int kind, PApplet app) {
+	private PImage  house, tree;
+
+	public AddElements(int posX, int posY, int size, int kind, PApplet app) {
 		this.app = app;
 		this.posX = posX;
 		this.posY = posY;
 		this.size = size;
 		this.kind = kind;
-		
+
+		house = app.loadImage("/resources/house.png");
+		tree = app.loadImage("/resources/tree.png");
+
 	}
-	
+
 	public void display() {
-		app.fill(25);
 		app.ellipse(posX, posY, size, size);
+
+		switch (kind) {
+		case 1:
+			app.image(house, posX, posY, size-20, size-20);
+
+			break;
+
+		case 2:
+			app.image(tree, posX, posY, size-15, size-15);
+
+
+			break;
+		}
 	}
-	
 
 	public int getPosX() {
 		return posX;
@@ -56,7 +72,5 @@ public class AddElements {
 	public void setKind(int kind) {
 		this.kind = kind;
 	}
-	
-	
-	
+
 }

@@ -7,8 +7,8 @@ public class DetectingZone {
 	private PApplet app;
 	private int posX, posY, size, state, stateSelected;
 	private int g, b, r;
-	private int energyCanUse, finalEnergy;
-	private int housePrice, treePrice;
+	private int energyCanUse;
+	private boolean ocupied;
 
 	public DetectingZone(int posX, int posY, int size, PApplet app) {
 		this.posX = posX;
@@ -20,11 +20,10 @@ public class DetectingZone {
 		b = 240;
 		state = 0;
 		stateSelected = 0;
-		housePrice = 50;
-		treePrice = 50;
+
 		energyCanUse = 0;
-		
-		finalEnergy = 0;
+
+		ocupied= false;
 	}
 
 	public void display() {
@@ -33,6 +32,14 @@ public class DetectingZone {
 		app.noStroke();
 		app.fill(r, g, b);
 		app.rect(0, 0, size - 53, size - 53);
+		if (ocupied == true) {
+			if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
+				app.tint(0, 153, 204);
+			} else {
+				app.tint(255);
+			}
+		}
+
 	}
 
 	public void moved() {
@@ -42,26 +49,33 @@ public class DetectingZone {
 		app.scale(1f, 0.58f);
 		app.rotate(app.radians(45));
 
-		if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
-			r = 210;
-			g = 10;
-			b = 10;
+		if (ocupied == false && stateSelected !=0) {
+			
+			if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
+				state = 3;
 
-		} else {
-			r = 240;
-			g = 240;
-			b = 240;
+			} else {
+				state = 0;
+			}
+
 		}
 
+
 		app.popMatrix();
+
 	}
 
 	public void clicked() {
-		if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
-			state= stateSelected;
-			
-			finalEnergy = energyCanUse - housePrice;
+
+
+		if (energyCanUse>=50) {
+			if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied==false) {
+				ocupied = true;
+
+				state = stateSelected;
+			}
 		}
+
 	}
 
 	public void setState(int state) {
@@ -79,21 +93,22 @@ public class DetectingZone {
 	public void setStateSelected(int stateSelected) {
 		this.stateSelected = stateSelected;
 	}
-	
-	public int getEnergyCanUse() {
-		return energyCanUse;
-	}
 
 	public void setEnergyCanUse(int energyCanUse) {
 		this.energyCanUse = energyCanUse;
 	}
 
-	public int getFinalEnergy() {
-		return finalEnergy;
+	public boolean isOcupied() {
+		return ocupied;
 	}
 
-	public void setFinalEnergy(int finalEnergy) {
-		this.finalEnergy = finalEnergy;
+	public void setOcupied(boolean ocupied) {
+		this.ocupied = ocupied;
 	}
+
+
+
 	
+	
+
 }

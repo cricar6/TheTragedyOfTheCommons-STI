@@ -11,7 +11,7 @@ public class SlideBar {
 	private int size;
 	private int indexator;
 	private boolean activated;
-	private int start, end;
+	private int min;
 
 	public SlideBar(int posX, int posY, int indexator, PApplet app) {
 		this.app = app;
@@ -20,15 +20,15 @@ public class SlideBar {
 		this.indexator = indexator;
 		activated = false;
 		size = 25;
-
+		min = 0;
 		posXB = posX;
 	}
 
 	public void display() {
 
-		indexator = ((app.mouseX) - posX) + 50;
-		if (indexator <= 0)
-			indexator = 0;
+		indexator = ((posXB) - posX) + 50;
+		if (indexator <= min)
+			indexator = min;
 		if (indexator >= 100)
 			indexator = 100;
 
@@ -46,7 +46,7 @@ public class SlideBar {
 	}
 
 	public void dragged() {
-		if (app.mouseX > posX - 50 && app.mouseX < posX + 50) {
+		if (app.mouseX > posX - 50 + min && app.mouseX < posX + 50) {
 			if (app.dist(app.mouseX, app.mouseY, posXB, posY) <= size) {
 				activated = true;
 
@@ -102,6 +102,14 @@ public class SlideBar {
 
 	public void setIndexator(int indexator) {
 		this.indexator = indexator;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
 	}
 
 	

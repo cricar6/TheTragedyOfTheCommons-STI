@@ -12,9 +12,10 @@ public class Square {
 	private DetectingZone detectZone;
 
 	private int stateSelected;
-	
+
 	private int energyCanUse;
-	private int finalEnergy;
+
+	private boolean ocupied;
 
 	public Square(int posX, int posY, int size, PApplet app) {
 		this.posX = posX;
@@ -24,8 +25,7 @@ public class Square {
 		app.rectMode(app.CENTER);
 
 		energyCanUse = 0;
-		finalEnergy = 0;
-		
+
 		detectZone = new DetectingZone(posX, posY, size, app);
 
 		state = 0;
@@ -33,6 +33,9 @@ public class Square {
 		for (int i = 0; i < states.length; i++) {
 			states[i] = app.loadImage("/resources/" + i + ".png");
 		}
+
+		ocupied = false;
+
 	}
 
 	void display() {
@@ -50,8 +53,6 @@ public class Square {
 
 		app.popMatrix();
 
-		state = detectZone.getState();
-		finalEnergy = detectZone.getFinalEnergy();
 		switch (state) {
 		case 0:
 			// println ("nothing");
@@ -68,6 +69,7 @@ public class Square {
 			app.image(states[1], 0, 0);
 
 			app.popMatrix();
+
 			break;
 		case 2:
 			// println ("tree");
@@ -78,22 +80,54 @@ public class Square {
 			app.translate(posX, posY - 12);
 			app.scale(.233f);
 
+			app.tint(255, 255);
 			app.image(states[2], 0, 0);
+			app.tint(255, 255);
 
 			app.popMatrix();
 			break;
 		case 3:
-			detectZone.setState(0);
+			app.imageMode(app.CENTER);
+
+			app.pushMatrix();
+			app.translate(posX, posY - 12);
+			app.scale(.233f);
+
+			app.tint(255, 100);
+			app.image(states[1], 0, 0);
+			app.tint(255, 255);
+
+			app.popMatrix();
+			break;
+		case 4:
+			app.imageMode(app.CENTER);
+
+			app.pushMatrix();
+			app.translate(posX, posY - 12);
+			app.scale(.233f);
+
+			app.tint(255, 100);
+			app.image(states[2], 0, 0);
+			app.tint(255, 255);
+
+			app.popMatrix();
+			break;
 		}
 	}
 
 	void moved() {
 		detectZone.moved();
+		state = detectZone.getState();
 	}
 
 	void clicked() {
 		detectZone.setStateSelected(stateSelected);
+
 		detectZone.clicked();
+		state = detectZone.getState();
+
+		ocupied = detectZone.isOcupied();
+
 	}
 
 	public int getPosY() {
@@ -108,21 +142,24 @@ public class Square {
 		this.stateSelected = stateSelected;
 	}
 
-	public int getEnergyCanUse() {
-		return energyCanUse;
-	}
-
 	public void setEnergyCanUse(int energyCanUse) {
 		this.energyCanUse = energyCanUse;
 	}
 
-	public int getFinalEnergy() {
-		return finalEnergy;
+	public boolean isOcupied() {
+		return ocupied;
 	}
 
-	public void setFinalEnergy(int finalEnergy) {
-		this.finalEnergy = finalEnergy;
+	public void setOcupied(boolean ocupied) {
+		this.ocupied = ocupied;
 	}
 
-	
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
 }

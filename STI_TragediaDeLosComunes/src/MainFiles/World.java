@@ -5,6 +5,7 @@ import InterfaceElements.AddNewElement;
 import InterfaceElements.Energy;
 import InterfaceElements.HappyBar;
 import InterfaceElements.Indicator;
+import InterfaceElements.NotificationBar;
 import InterfaceElements.Season;
 import InterfaceElements.Timer;
 import WorldElements.City;
@@ -50,10 +51,17 @@ public class World {
 	private AddNewElement add;
 	private HappyBar happy;
 	private Timer timer;
+	private NotificationBar notifs;
 	private boolean restartTimer;
 
 	// Logical variables
-	private int startEnergy, energyWasting, finalEnergy, population, demand, happiness, happinessThisTurn, season;
+	private int startEnergy, energyWasting, finalEnergy;
+	private int population, demand;
+	private int happiness, happinessThisTurn;
+	private int season;
+	private int housePrice, treePrice;
+	private int minSummer, minAutumn, minWinter, minSpring;
+
 	private boolean alive;
 
 	public World(PApplet app) {
@@ -64,7 +72,7 @@ public class World {
 
 		screen = 0;
 		alive = true;
-		
+
 		// Splash
 		backgrounds = new PImage[3];
 		for (int i = 0; i < backgrounds.length; i++) {
@@ -80,18 +88,24 @@ public class World {
 		logo = app.loadImage("/resources/logo.png");
 
 		// Logical variables
-		startEnergy = 500;
+		startEnergy = 100;
 		energyWasting = 0;
 		population = 0;
 		demand = 0;
 		happiness = 50;
 		happinessThisTurn = 0;
 		season = 1;
-
+		housePrice = happinessThisTurn;
+		treePrice = 30;
 		
+		minSummer = 25;
+		minAutumn = 15;
+		minWinter = 30;
+		minSpring = 15;
+
 		// Interface
-		people = new Indicator(100, 60, population + "", "POBLACIÓN", app);
-		energyForUse = new Indicator(300, 60, demand + "", "DEMANDA", app);
+		people = new Indicator(100, 60, "POBLACIÓN", app);
+		energyForUse = new Indicator(300, 60, "DEMANDA", app);
 
 		add = new AddNewElement(app.width - 100, app.height - 100, app);
 
@@ -99,7 +113,8 @@ public class World {
 		energyIndicator = new Energy(app.width - 75, 170, app);
 
 		happy = new HappyBar(100, app.height - 100, app);
-
+		notifs = new NotificationBar(app.width/2, app.height-100,  app );
+		
 		timer = new Timer();
 		Thread t = new Thread(timer);
 		t.start();
@@ -112,8 +127,7 @@ public class World {
 
 		x += app.width / 2;
 		y += app.height / 2;
-		city = new City(cols, rows, size, app);
-
+		city = new City(cols, rows, size, housePrice, treePrice, app);
 
 		/*
 		 * al iniciar turno finalEnergy es igual a la resta de energyWasting y
@@ -126,18 +140,34 @@ public class World {
 
 	public void display() {
 
-		//variable changer
-		finalEnergy = startEnergy-energyWasting;
-		if (finalEnergy <= 0) alive = false;
+		// variable changer
+
+		finalEnergy = startEnergy - energyWasting;
+		if (finalEnergy <= 0)
+			alive = false;
 		city.setEnergyCanUse(finalEnergy);
-		finalEnergy = city.getFinalEnergy();
-		
+		city.setDemandedEnergy(demand);
+		population = city.getPopulation();
+		// System.out.println(demand);
+
 		people.setIndexator(population);
 		energyForUse.setIndexator(demand);
-		happiness = happy.getIndexator();
-		
-		System.out.println("StartEnergy" + startEnergy + "EnergyWasting" +energyWasting + "finalEnergy" + finalEnergy);
-		
+
+		happinessThisTurn = happy.getIndexator();
+		housePrice = happinessThisTurn;
+		city.setHousePrice(housePrice);
+		demand = city.calculateDemand(housePrice, treePrice);
+		System.out.println(demand);
+
+		if (season == 1)
+			happy.setMin(minSummer);
+		if (season == 2)
+			happy.setMin(minAutumn);
+		if (season == 3)
+			happy.setMin(minWinter);
+		if (season == 4)
+			happy.setMin(minSpring);
+
 		app.camera(x, y, (app.height / 2.0f) / app.tan(app.PI * 30.0f / 180.0f) + zoom, x, y, 0f, 0f, 1f, 0f);
 
 		switch (screen) {
@@ -245,12 +275,15 @@ public class World {
 		case 3:
 			// Interface display
 			city.display();
+
 			people.display();
 			energyForUse.display();
 			seasonIndicator.display();
 			energyIndicator.display();
 			add.display();
 			happy.display();
+			notifs.display();
+
 			// Timer logic
 			if (restartTimer == true) {
 				timer.restart();
@@ -318,10 +351,13 @@ public class World {
 
 			add.clicked();
 			city.setStateSelected(add.getStateSelected());
-
 			city.clicked();
-			energyIndicator.clicked();
+			demand = city.getDemandedEnergy();
+			energyForUse.setIndexator(demand);
 
+			energyIndicator.clicked();
+			//To add a notification
+			notifs.addNotif("Holi", 2);
 		}
 	}
 

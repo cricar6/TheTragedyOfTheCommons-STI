@@ -3,16 +3,20 @@ package InterfaceElements;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PShape;
 
 public class AddNewElement {
 
 	private int posX, posY;
-	private int size;
+	private int size, elementsSize;
 	private PApplet app;
 	private ArrayList<AddElements> elements;
 
-	int stateSelected;
+	private int stateSelected;
 
+	private PImage add;
+	
 	public AddNewElement(int posX, int posY, PApplet app) {
 		this.posX = posX;
 		this.posY = posY;
@@ -20,15 +24,22 @@ public class AddNewElement {
 
 		elements = new ArrayList<AddElements>();
 
-		size = 50;
-		elements.add(new AddElements(posX, posY - (size +10) , size - 10, 1, app));
-		elements.add(new AddElements(posX, posY - (size * 2 + 10), size - 10, 2, app));
+		size = 80;
+		elementsSize = 60;
+		elements.add(new AddElements(posX, posY - (size ) , elementsSize, 1, app));
+		elements.add(new AddElements(posX, posY - (size * 2 -10), elementsSize, 2, app));
 
 		stateSelected = 0;
+		
+		add = app.loadImage("/resources/add.png");
+
+
 	}
 
 	public void display() {
+		app.shapeMode(app.CENTER);
 		app.ellipse(posX, posY, size, size);
+		app.image(add, posX, posY, size-35, size-35);
 
 		for (int i = 0; i < elements.size(); i++) {
 			AddElements element = elements.get(i);

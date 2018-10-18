@@ -10,6 +10,7 @@ public class HappyBar {
 	private PFont bebas;
 	private SlideBar slide;
 	private int indexator;
+	private int min;
 
 	public HappyBar(int posX, int posY, PApplet app) {
 
@@ -26,9 +27,13 @@ public class HappyBar {
 		slide = new SlideBar(postemX, postemY, 50, app);
 
 		indexator = 0;
+		
+		min = 25;
+
 	}
 
 	public void display() {
+		slide.setMin(min);
 		app.rectMode(app.CENTER);
 
 		app.fill(37, 57, 73);
@@ -44,10 +49,14 @@ public class HappyBar {
 		app.fill(188);
 		app.textSize(25);
 		app.textAlign(app.CENTER);
+		
 
-		app.text(0, posX - size / 2 + 15, posY + 25);
-		app.text(50, posX - 5, posY + 25);
-		app.text(100, posX + size / 2 - 25, posY + 25);
+		
+		app.text(min, (posX-50)+min, posY + 25);
+		
+		app.textSize(15);
+		app.text(0, posX-50, posY + 25);
+		app.text(100, posX+50 , posY + 25);
 
 		app.rect(posX, posY + 55, size, 45, 15);
 
@@ -77,6 +86,14 @@ public class HappyBar {
 
 	public void setIndexator(int indexator) {
 		this.indexator = indexator;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
 	}
 	
 	
