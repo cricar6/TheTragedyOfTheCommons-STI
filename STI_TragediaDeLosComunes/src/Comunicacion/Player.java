@@ -4,7 +4,7 @@ public abstract class Player extends Thread {
 
 	protected int poblacion, felicidad, demanda;
 	protected String nombre;
-	protected int season, energiaGeneral, turno;
+	protected int season, energiaGeneral, turno, pasiveEnergy;
 	protected String notificacion;
 	protected boolean canPlay = false;
 
@@ -40,6 +40,9 @@ public abstract class Player extends Thread {
 		return season;
 	}
 
+	public int getPasiveEnergy () {
+		return pasiveEnergy;
+	}
 
 	
 }

@@ -59,9 +59,9 @@ public class World {
 	private boolean restartTimer;
 
 	// Logical variables
-	private int startEnergy, energyWasting, finalEnergy;
+	private int  pasiveEnergy, finalEnergy, energyByEnvironment;
 	private int population, demand;
-	private int happiness, happinessThisTurn;
+	private int happiness, happinessThisTurn, deads;
 	private int season;
 	private int housePrice, treePrice;
 	private int minSummer, minAutumn, minWinter, minSpring;
@@ -98,11 +98,11 @@ public class World {
 		logo = app.loadImage("/resources/logo.png");
 
 		// Logical variables
-		startEnergy = 200;
-		energyWasting = 0;
-		finalEnergy = 0;
+		pasiveEnergy = 0;
+		finalEnergy = 500;
 
 		population = 0;
+		deads = 0;
 		demand = 0;
 		happiness = 50;
 		happinessThisTurn = 0;
@@ -152,18 +152,18 @@ public class World {
 		multicast = new Multicast();
 		multicast.start();
 
-		multicast.getData(population, demand, startEnergy);
+		multicast.getData(population, demand, finalEnergy);
 	}
 
 	int tempPopulation, tempDemand;
+	int temTurn;
+	
 
 	public void display() {
 
 		// variable changer
 
-		finalEnergy = startEnergy - energyWasting;
-		if (finalEnergy <= 0)
-			alive = false;
+		energyByEnvironment = city.getEvironmentalEnergy();
 		city.setEnergyCanUse(finalEnergy);
 		city.setDemandedEnergy(demand);
 		population = city.getPopulation();
@@ -171,12 +171,12 @@ public class World {
 
 		people.setIndexator(population);
 		energyForUse.setIndexator(demand);
-		totalEnergy.setIndexator(startEnergy);
+		totalEnergy.setIndexator(finalEnergy);
 
 		happinessThisTurn = happy.getIndexator();
 		housePrice = happinessThisTurn;
 		city.setHousePrice(housePrice);
-		demand = city.calculateDemand(housePrice, treePrice);
+		demand = city.calculateDemand(housePrice);
 		// System.out.println(demand);
 
 		if (season == 1)
@@ -271,6 +271,7 @@ public class World {
 
 			break;
 		case 2:
+
 			// Interface display
 			city.display();
 
@@ -281,7 +282,7 @@ public class World {
 			season = multicast.getSeason();
 			seasonIndicator.setSeasonSelected(season);
 			seasonIndicator.display();
-			
+
 			energyIndicator.display();
 			add.display();
 			happy.display();
@@ -293,12 +294,17 @@ public class World {
 			if (tempDemand != demand) {
 				multicast.setDemanda(demand);
 			}
+			if (temTurn != multicast.getTurnoAlServidor()) {
+				startTurn();
+			}
+			temTurn = multicast.getTurnoAlServidor();
 			tempPopulation = population;
 			tempDemand = demand;
 
 			// Turn viewer
 			if (multicast.getTurno() == multicast.turnoAlServidor) {
 				app.text("Es tu turno", app.width / 2, app.height / 2);
+
 			}
 			// Timer logic
 			if (restartTimer == true) {
@@ -327,11 +333,35 @@ public class World {
 	}
 
 	public void startTurn() {
+		// Inicio
+		timer.setStop(false);
+		pasiveEnergy = multicast.getPasiveEnergy();
+		finalEnergy = finalEnergy + pasiveEnergy;
 
 	}
 
 	public void endTurn() {
-		//
+
+		if (city.getDemandedEnergy() > finalEnergy) {
+
+			int populationAliveAfter = (finalEnergy - city.getDemandedEnergy()) / happinessThisTurn;
+			int populationDead = populationAliveAfter - population;
+			population = populationAliveAfter;
+			city.setPopulation(population);
+			deads = deads + populationDead;
+			System.out.println("deads"+ deads);
+
+			finalEnergy = finalEnergy - city.getDemandedEnergy();
+
+		} else {
+			System.out.println("tanbonitoELBOOBHP");
+		
+			finalEnergy = finalEnergy - city.getDemandedEnergy();
+		}
+
+		// Notificar al servidor de que le va a dar energia
+		timer.setStop(true);
+		timer.restart();
 	}
 
 	public void kpress() {
@@ -347,6 +377,7 @@ public class World {
 		if (multicast.getTurno() == multicast.turnoAlServidor) {
 			if (app.key == 'p') {
 				multicast.enviar("termine");
+				endTurn();
 				System.out.println(multicast.getTurno());
 				System.out.println(multicast.turnoAlServidor);
 			}
@@ -387,6 +418,7 @@ public class World {
 
 		if (screen == 2) {
 			if (multicast.getTurno() == multicast.turnoAlServidor) {
+				
 				add.clicked();
 				city.setStateSelected(add.getStateSelected());
 				city.clicked();

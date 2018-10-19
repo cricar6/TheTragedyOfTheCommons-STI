@@ -121,6 +121,7 @@ public class Square {
 	}
 
 	void clicked() {
+
 		detectZone.setStateSelected(stateSelected);
 
 		detectZone.clicked();

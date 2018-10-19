@@ -13,6 +13,7 @@ public class City {
 	private int stateSelected;
 	private int energyCanUse;
 	private int demandedEnergy;
+	private int evironmentalEnergy;
 	private int population;
 	private int housePrice, treePrice;
 
@@ -28,7 +29,6 @@ public class City {
 
 		squares = new ArrayList<Square>();
 		energyCanUse = 0;
-
 
 		for (int i = 0; i < cols; i++) {
 			for (int j = 0; j < rows; j++) {
@@ -80,6 +80,7 @@ public class City {
 
 			square.clicked();
 
+
 		}
 		Collections.sort(squares, new Comparator<Square>() {
 
@@ -94,44 +95,57 @@ public class City {
 			}
 
 		});
-		
+
 		demandedEnergy = 0;
-		demandedEnergy = calculateDemand(housePrice, treePrice);
-		population = calculatePopulation(5);
+		demandedEnergy = calculateDemand(housePrice);
+		evironmentalEnergy = calculateEnvironmentEnergy(treePrice);
 		
+		population = calculatePopulation(5);
+
 	}
-	public int calculatePopulation (int peoplePerHouse) {
+
+	public int calculatePopulation(int peoplePerHouse) {
 		int houseQ = 0;
 
 		for (int i = 0; i < squares.size(); i++) {
 			Square square = squares.get(i);
 
-			
 			if (square.isOcupied() == true) {
 				if (square.getState() == 1) {
 					houseQ++;
 				}
 			}
 		}
-		return houseQ*peoplePerHouse;
-	} 
-	
-	
-	public int calculateDemand (int housePrice, int treePrice) {
+		return houseQ * peoplePerHouse;
+	}
+
+	public int calculateDemand(int housePrice) {
 		int houseTEnergy = 0;
-		int treeTEnergy = 0;
 		for (int i = 0; i < squares.size(); i++) {
 			Square square = squares.get(i);
 
 			houseTEnergy = population * housePrice;
+
+		}
+		// System.out.println("houses " + houseTEnergy + "trees" + treeTEnergy);
+		return houseTEnergy;
+
+	}
+
+	private int calculateEnvironmentEnergy(int treePrice) {
+		int treeTEnergy = 0;
+
+		for (int i = 0; i < squares.size(); i++) {
+			Square square = squares.get(i);
+
 			if (square.isOcupied() == true) {
 				if (square.getState() == 2) {
-					treeTEnergy+= treePrice;
+					treeTEnergy += treePrice;
 				}
 			}
 		}
-		//System.out.println("houses " + houseTEnergy + "trees" + treeTEnergy);
-		return houseTEnergy + treeTEnergy;
+		return treeTEnergy;
+
 	}
 
 	public int getStateSelected() {
@@ -172,6 +186,14 @@ public class City {
 
 	public void setPopulation(int population) {
 		this.population = population;
+	}
+
+	public int getEvironmentalEnergy() {
+		return evironmentalEnergy;
+	}
+
+	public void setEvironmentalEnergy(int evironmentalEnergy) {
+		this.evironmentalEnergy = evironmentalEnergy;
 	}
 
 	

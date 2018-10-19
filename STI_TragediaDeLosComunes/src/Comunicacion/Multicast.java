@@ -147,6 +147,10 @@ public class Multicast extends Player {
 			if (msgReceived.equals("juegoTerminado")) {
 				season = 0;
 			}
+			if (msgReceived.contains("EnergyByRound")) {
+				String[] separate = msgReceived.split(":");
+				pasiveEnergy = Integer.parseInt(separate [1]);
+			}
 
 		} else {
 			if (msgReceived.contains("MyIDIs:")) {
@@ -184,5 +188,15 @@ public class Multicast extends Player {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public int getTurnoAlServidor() {
+		return turnoAlServidor;
+	}
+
+	public void setTurnoAlServidor(int turnoAlServidor) {
+		this.turnoAlServidor = turnoAlServidor;
+	}
+	
+	
 
 }

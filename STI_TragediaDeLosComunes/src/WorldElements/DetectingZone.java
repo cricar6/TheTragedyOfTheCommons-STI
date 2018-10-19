@@ -67,12 +67,16 @@ public class DetectingZone {
 
 	public void clicked() {
 
+		System.out.println(energyCanUse);
 
 		if (energyCanUse>=50) {
+
 			if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied==false) {
+
 				ocupied = true;
 
 				state = stateSelected;
+
 			}
 		}
 
