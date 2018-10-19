@@ -38,8 +38,16 @@ public class Square {
 
 	}
 
+	int temstate;
+
 	void display() {
 
+		if (temstate != state) {
+			detectZone.setState(state);
+			detectZone.setOcupied(ocupied);
+		}
+
+		temstate = state;
 		detectZone.setEnergyCanUse(energyCanUse);
 		app.pushMatrix();
 
@@ -120,15 +128,33 @@ public class Square {
 		state = detectZone.getState();
 	}
 
+	void restartVars() {
+		ocupied = false;
+		state = 0;
+		stateSelected = 0;
+		detectZone.setState(0);
+		detectZone.setOcupied(false);
+		detectZone.setStateSelected(0);
+		
+	}
 	void clicked() {
 
-		detectZone.setStateSelected(stateSelected);
-
+		setVars();
 		detectZone.clicked();
+		setVars2();
+
+	}
+
+	public void setVars() {
+
+		detectZone.setOcupied(ocupied);
+		detectZone.setStateSelected(stateSelected);
+	}
+	
+	public void setVars2 () {
+
 		state = detectZone.getState();
-
 		ocupied = detectZone.isOcupied();
-
 	}
 
 	public int getPosY() {

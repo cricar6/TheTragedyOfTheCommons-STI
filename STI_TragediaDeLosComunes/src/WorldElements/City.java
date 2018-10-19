@@ -80,7 +80,6 @@ public class City {
 
 			square.clicked();
 
-
 		}
 		Collections.sort(squares, new Comparator<Square>() {
 
@@ -99,8 +98,33 @@ public class City {
 		demandedEnergy = 0;
 		demandedEnergy = calculateDemand(housePrice);
 		evironmentalEnergy = calculateEnvironmentEnergy(treePrice);
-		
+
 		population = calculatePopulation(5);
+
+	}
+
+	public void deleteHouses(int population) {
+
+		int Housesq;
+		if (population != 0) {
+			if (population > 5) {
+				Housesq = population / 5;
+			} else {
+				Housesq = 1;
+			}
+
+		} else {
+			Housesq = 0;
+		}
+		for (int i = 0; i < squares.size() - Housesq; i++) {
+			Square square = squares.get(i);
+
+			if (square.isOcupied() == true) {
+				if (square.getState() == 1) {
+					square.restartVars();
+				}
+			}
+		}
 
 	}
 
@@ -196,5 +220,4 @@ public class City {
 		this.evironmentalEnergy = evironmentalEnergy;
 	}
 
-	
 }

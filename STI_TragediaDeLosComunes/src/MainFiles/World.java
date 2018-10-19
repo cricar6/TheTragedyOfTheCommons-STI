@@ -59,7 +59,7 @@ public class World {
 	private boolean restartTimer;
 
 	// Logical variables
-	private int  pasiveEnergy, finalEnergy, energyByEnvironment;
+	private int pasiveEnergy, finalEnergy, energyByEnvironment;
 	private int population, demand;
 	private int happiness, happinessThisTurn, deads;
 	private int season;
@@ -157,7 +157,7 @@ public class World {
 
 	int tempPopulation, tempDemand;
 	int temTurn;
-	
+	String temNotif;
 
 	public void display() {
 
@@ -297,6 +297,10 @@ public class World {
 			if (temTurn != multicast.getTurnoAlServidor()) {
 				startTurn();
 			}
+			if (temNotif != multicast.getNotif()) {
+				notifs.addNotif(multicast.getNotif(), 2 );
+			}
+			temNotif = multicast.getNotif();
 			temTurn = multicast.getTurnoAlServidor();
 			tempPopulation = population;
 			tempDemand = demand;
@@ -310,6 +314,7 @@ public class World {
 			if (restartTimer == true) {
 				timer.restart();
 				timer.setStop(true);
+
 				restartTimer = false;
 			}
 
@@ -322,6 +327,8 @@ public class World {
 				multicast.enviar("termine");
 
 				restartTimer = true;
+
+				endTurn();
 			}
 
 			timer.setStop(false);
@@ -334,7 +341,9 @@ public class World {
 
 	public void startTurn() {
 		// Inicio
+		timer.restart();
 		timer.setStop(false);
+		energyIndicator.setCanSelect(true);
 		pasiveEnergy = multicast.getPasiveEnergy();
 		finalEnergy = finalEnergy + pasiveEnergy;
 
@@ -347,18 +356,28 @@ public class World {
 			int populationAliveAfter = (finalEnergy - city.getDemandedEnergy()) / happinessThisTurn;
 			int populationDead = populationAliveAfter - population;
 			population = populationAliveAfter;
-			city.setPopulation(population);
 			deads = deads + populationDead;
-			System.out.println("deads"+ deads);
 
-			finalEnergy = finalEnergy - city.getDemandedEnergy();
+			if (population < 0) {
+				population = 0;
+			}
+
+			city.setPopulation(population);
+			city.deleteHouses(populationDead);
+
+			System.out.println("deads" + deads);
+
+			finalEnergy = finalEnergy - demand;
 
 		} else {
-			System.out.println("tanbonitoELBOOBHP");
-		
-			finalEnergy = finalEnergy - city.getDemandedEnergy();
+
+			finalEnergy = finalEnergy - demand;
 		}
 
+		if (finalEnergy < 0) {
+			finalEnergy = 0;
+		}
+		multicast.setEnergy(finalEnergy);
 		// Notificar al servidor de que le va a dar energia
 		timer.setStop(true);
 		timer.restart();
@@ -418,16 +437,30 @@ public class World {
 
 		if (screen == 2) {
 			if (multicast.getTurno() == multicast.turnoAlServidor) {
-				
+
 				add.clicked();
 				city.setStateSelected(add.getStateSelected());
 				city.clicked();
 				demand = city.getDemandedEnergy();
 				energyForUse.setIndexator(demand);
 
+				energyIndicator.setDemand(demand);
+				energyIndicator.setFinalEnergy(finalEnergy);
+
 				energyIndicator.clicked();
+
+
+				if (energyIndicator.isSendNotif() == true) {
+					
+					multicast.notifyPlayers("Se ha añadido " + energyIndicator.getEnergyGiven() + " de energía.");
+
+					finalEnergy = finalEnergy + energyIndicator.getEnergyGiven();
+					energyIndicator.setSendNotif(false);
+					
+				}
+
 				// To add a notification
-				notifs.addNotif("Holi", 2);
+
 			}
 		}
 	}

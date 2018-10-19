@@ -151,6 +151,18 @@ public class Multicast extends Player {
 				String[] separate = msgReceived.split(":");
 				pasiveEnergy = Integer.parseInt(separate [1]);
 			}
+			if (msgReceived.contains("EnergyByRound")) {
+				String[] separate = msgReceived.split(":");
+				pasiveEnergy = Integer.parseInt(separate [1]);
+			}			
+			if (msgReceived.contains("notif")) {
+				String[] separate = msgReceived.split(":");
+				String name = separate[1];
+				String notif = separate[2];
+				String newNotif = name + " : " + notif;
+				notif = newNotif;
+			}
+			
 
 		} else {
 			if (msgReceived.contains("MyIDIs:")) {
@@ -181,6 +193,16 @@ public class Multicast extends Player {
 	public void setDemanda(int demanda) {
 		this.demanda = demanda;
 		enviar("IMDem:" + id + ":" + demanda);
+	}
+
+	@Override
+	public void setEnergy(int energy) {
+		this.energiaGeneral = energy;
+		enviar("IMEne:" + id + ":" + energy);
+	}
+	
+	public void notifyPlayers(String notif) {
+		enviar("notif:" + nombre + ":" + notif);
 	}
 
 	@Override

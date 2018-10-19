@@ -11,8 +11,12 @@ public class Energy {
 	private int posX, posY;
 	private int size;
 	private boolean canSelect = true;
+	private int energyGiven;
+	private int finalEnergy;
 	private int energySelected;
 	private PImage energy;
+	private int demand;
+	private boolean sendNotif = false;
 
 	private ArrayList<EnergyElement> elements;
 
@@ -36,16 +40,20 @@ public class Energy {
 	}
 
 	public void display() {
+		System.out.println(canSelect);
 		app.tint(255,255);
 		for (int i = 0; i < elements.size(); i++) {
 			EnergyElement element = elements.get(i);
 			element.display();
+			if (canSelect == true) {
+				app.tint(255,255);
+
+			}
 			if (element.isSelected()==true) {
 				canSelect=false;
 			}
 			if (canSelect == false) {
 				element.setVisible(false);
-				app.tint(255,40);
 
 			}
 		}
@@ -58,6 +66,13 @@ public class Energy {
 	}
 
 	public void moved() {
+
+
+
+	}
+	
+	public void clicked () {
+		
 		if (canSelect == true) {
 			if (app.dist(app.mouseX, app.mouseY, posX, posY) < size) {
 				for (int i = 0; i < elements.size(); i++) {
@@ -66,22 +81,85 @@ public class Energy {
 				}	
 			}	
 		}
-
-
-	}
-	
-	public void clicked () {
 		for (int i = 0; i < elements.size(); i++) {
 			EnergyElement element = elements.get(i);
 			
 			if (element.isVisible()==true) {
 				if (app.dist(app.mouseX, app.mouseY, element.getPosX(), element.getPosY())< element.getSize()) {
 					element.setSelected(true);
+					
 					energySelected = element.getState();
-					System.out.println(energySelected);
+					
+					if (energySelected==1) energyGiven = (int) (demand * 0.25);
+					if (energySelected==2) energyGiven = (int) (demand * 0.50);
+					if (energySelected==3) energyGiven = (int) (demand * 1);
+					if (energySelected==4) energyGiven = (int) (demand * 2);
+
+					sendNotif = true;
+					canSelect = false;
+					element.setSelected(false);
 				}
 			}
 
 		}
 	}
+
+	public boolean isCanSelect() {
+		return canSelect;
+	}
+
+	public void setCanSelect(boolean canSelect) {
+		this.canSelect = canSelect;
+	}
+
+	public int getEnergySelected() {
+		return energySelected;
+	}
+
+	public void setEnergySelected(int energySelected) {
+		this.energySelected = energySelected;
+	}
+
+	public PImage getEnergy() {
+		return energy;
+	}
+
+	public void setEnergy(PImage energy) {
+		this.energy = energy;
+	}
+
+	public int getDemand() {
+		return demand;
+	}
+
+	public void setDemand(int demand) {
+		this.demand = demand;
+	}
+
+	public int getEnergyGiven() {
+		return energyGiven;
+	}
+
+	public void setEnergyGiven(int energyGiven) {
+		this.energyGiven = energyGiven;
+	}
+
+	public int getFinalEnergy() {
+		return finalEnergy;
+	}
+
+	public void setFinalEnergy(int finalEnergy) {
+		this.finalEnergy = finalEnergy;
+	}
+
+	public boolean isSendNotif() {
+		return sendNotif;
+	}
+
+	public void setSendNotif(boolean sendNotif) {
+		this.sendNotif = sendNotif;
+	}
+	
+	
+	
 }

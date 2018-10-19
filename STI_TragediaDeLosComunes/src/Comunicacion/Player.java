@@ -8,6 +8,7 @@ public abstract class Player extends Thread {
 	protected String notificacion;
 	protected boolean canPlay = false;
 
+	protected String notif;
 	public Player () {
 		
 	}
@@ -26,7 +27,8 @@ public abstract class Player extends Thread {
 	public abstract void setPoblacion(int poblacion);
 	public abstract void setDemanda(int demanda);
 	public abstract void setSeason(int season);
-
+	public abstract void setEnergy (int energy);
+	public abstract void notifyPlayers(String notif) ;
 	
 	public boolean isCanPlay() {
 		return canPlay;
@@ -44,5 +46,11 @@ public abstract class Player extends Thread {
 		return pasiveEnergy;
 	}
 
+	public String getNotif() {
+		return notif;
+	}
+
+	
+	
 	
 }
