@@ -1,5 +1,6 @@
 package MainFiles;
 
+import Comunicacion.Multicast;
 import InterfaceElements.AddElements;
 import InterfaceElements.AddNewElement;
 import InterfaceElements.Energy;
@@ -47,12 +48,13 @@ public class World {
 	private Indicator people;
 	private Indicator energyForUse;
 	private Indicator totalEnergy;
-	
+
 	private Season seasonIndicator;
 	private Energy energyIndicator;
 	private AddNewElement add;
 	private HappyBar happy;
 	private Timer timer;
+	private int maxTime;
 	private NotificationBar notifs;
 	private boolean restartTimer;
 
@@ -63,6 +65,11 @@ public class World {
 	private int season;
 	private int housePrice, treePrice;
 	private int minSummer, minAutumn, minWinter, minSpring;
+	private int turno;
+	private boolean isTurno;
+
+	// Conection
+	public Multicast multicast;
 
 	private boolean alive;
 
@@ -74,7 +81,8 @@ public class World {
 
 		screen = 0;
 		alive = true;
-
+		turno = 0;
+		maxTime = 20;
 		// Splash
 		backgrounds = new PImage[3];
 		for (int i = 0; i < backgrounds.length; i++) {
@@ -90,10 +98,10 @@ public class World {
 		logo = app.loadImage("/resources/logo.png");
 
 		// Logical variables
-		startEnergy = 100;
+		startEnergy = 200;
 		energyWasting = 0;
 		finalEnergy = 0;
-		
+
 		population = 0;
 		demand = 0;
 		happiness = 50;
@@ -101,7 +109,7 @@ public class World {
 		season = 1;
 		housePrice = happinessThisTurn;
 		treePrice = 30;
-		
+
 		minSummer = 25;
 		minAutumn = 15;
 		minWinter = 30;
@@ -111,15 +119,15 @@ public class World {
 		people = new Indicator(100, 60, "POBLACIÓN", app);
 		energyForUse = new Indicator(300, 60, "DEMANDA", app);
 		totalEnergy = new Indicator(500, 60, "ENERGíA", app);
-		
+
 		add = new AddNewElement(app.width - 100, app.height - 100, app);
 
 		seasonIndicator = new Season(app.width - 150, 60, season, app);
 		energyIndicator = new Energy(app.width - 75, 170, app);
 
 		happy = new HappyBar(100, app.height - 100, app);
-		notifs = new NotificationBar(app.width/2, app.height-100,  app );
-		
+		notifs = new NotificationBar(app.width / 2, app.height - 100, app);
+
 		timer = new Timer();
 		Thread t = new Thread(timer);
 		t.start();
@@ -141,7 +149,13 @@ public class World {
 		 * 
 		 */
 
+		multicast = new Multicast();
+		multicast.start();
+
+		multicast.getData(population, demand, startEnergy);
 	}
+
+	int tempPopulation, tempDemand;
 
 	public void display() {
 
@@ -163,7 +177,7 @@ public class World {
 		housePrice = happinessThisTurn;
 		city.setHousePrice(housePrice);
 		demand = city.calculateDemand(housePrice, treePrice);
-		System.out.println(demand);
+		// System.out.println(demand);
 
 		if (season == 1)
 			happy.setMin(minSummer);
@@ -228,7 +242,9 @@ public class World {
 			app.text("Presiona ENTER para continuar", app.width / 2, app.height, 400, 70);
 
 			break;
+
 		case 1:
+
 			app.textAlign(app.CENTER);
 			app.tint(37, 57, 23);
 			app.image(logo, app.width / 2, 120, 120, 180);
@@ -245,53 +261,45 @@ public class World {
 			app.fill(56, 88, 109);
 
 			app.text(
-					"Antes de empezar nos gustaría que firmaras algunos papeles. Ya sabes, cosas de protocolo. Cuéntanos ¿cómo se llamará tu ciudad?",
+					"Bienvenido!  Antes de empezar nos gustaría que firmaras algunos papeles. Ya sabes, cosas de protocolo. Cuéntanos ¿cómo se llamará tu ciudad?",
 					app.width / 2, app.height / 2 + 70, 700, 200);
 
 			app.textSize(30);
 			app.textFont(brush);
-			app.text(cityName, app.width / 2, app.height / 2 + 250, app.width, 400);
+			app.text(cityName + multicast.isCanPlay(), app.width / 2, app.height / 2 + 250, app.width, 400);
 			app.line(app.width / 2 - 500, app.height / 2 + 170, app.width / 2 + 500, app.height / 2 + 170);
+
 			break;
 		case 2:
-			app.textAlign(app.CENTER);
-			app.tint(37, 57, 23);
-			app.image(logo, app.width / 2, 120, 120, 180);
-			app.tint(255);
-
-			app.fill(37, 57, 73);
-			app.textFont(bebas);
-
-			app.textSize(80);
-			app.text("Dirección", app.width / 2, app.height / 2 - 100, app.width, 100);
-
-			app.textFont(teko);
-			app.textSize(30);
-			app.fill(56, 88, 109);
-
-			app.text(
-					"Un paso más... ¿Dónde te ubicarás? Puedes encontrar la dirección de tu nueva ciudad en la pantalla del monitor principal.",
-					app.width / 2, app.height / 2 + 70, 700, 200);
-
-			app.textSize(50);
-			app.text(ip, app.width / 2, app.height / 2 + 310, app.width, 400);
-			app.line(app.width / 2 - 500, app.height / 2 + 170, app.width / 2 + 500, app.height / 2 + 170);
-
-			break;
-		case 3:
 			// Interface display
 			city.display();
 
 			people.display();
 			energyForUse.display();
 			totalEnergy.display();
-			
+
+			season = multicast.getSeason();
+			seasonIndicator.setSeasonSelected(season);
 			seasonIndicator.display();
+			
 			energyIndicator.display();
 			add.display();
 			happy.display();
 			notifs.display();
 
+			if (tempPopulation != population) {
+				multicast.setPoblacion(population);
+			}
+			if (tempDemand != demand) {
+				multicast.setDemanda(demand);
+			}
+			tempPopulation = population;
+			tempDemand = demand;
+
+			// Turn viewer
+			if (multicast.getTurno() == multicast.turnoAlServidor) {
+				app.text("Es tu turno", app.width / 2, app.height / 2);
+			}
 			// Timer logic
 			if (restartTimer == true) {
 				timer.restart();
@@ -302,10 +310,13 @@ public class World {
 			app.fill(37, 57, 73);
 			app.textSize(50);
 
-			app.text(60 - timer.getS(), app.width / 2, 70);
+			app.text(maxTime - timer.getS(), app.width / 2, 70);
 
-			if (60 - timer.getS() == 0)
+			if (maxTime - timer.getS() == 0) {
+				multicast.enviar("termine");
+
 				restartTimer = true;
+			}
 
 			timer.setStop(false);
 
@@ -315,13 +326,32 @@ public class World {
 		}
 	}
 
+	public void startTurn() {
+
+	}
+
+	public void endTurn() {
+		//
+	}
+
 	public void kpress() {
 		if (screen == 1) {
 			cityName = writeVar(cityName, cityNamePlaceHolder);
 		}
-		if (screen == 2) {
-			ip = writeVar(ip, ipPlaceHolder);
+		if (screen == 0 && app.ENTER == app.key) {
+			screen++;
+		} else if (screen == 1 && app.ENTER == app.key && multicast.isCanPlay() == true) {
+			screen++;
 		}
+
+		if (multicast.getTurno() == multicast.turnoAlServidor) {
+			if (app.key == 'p') {
+				multicast.enviar("termine");
+				System.out.println(multicast.getTurno());
+				System.out.println(multicast.turnoAlServidor);
+			}
+		}
+
 	}
 
 	private String writeVar(String varToWrite, String varPlaceHolder) {
@@ -336,6 +366,8 @@ public class World {
 			varToWrite = "";
 		}
 		if (app.key == app.ENTER) {
+			multicast.setNombre(cityName);
+
 			System.out.println(varToWrite + " Sent");
 		}
 		System.out.println(varToWrite);
@@ -344,7 +376,7 @@ public class World {
 	}
 
 	public void moved() {
-		if (screen == 3) {
+		if (screen == 2) {
 			city.moved();
 			energyIndicator.moved();
 			happy.moved();
@@ -352,20 +384,19 @@ public class World {
 	}
 
 	public void clicked() {
-		if (screen != 3) {
-			screen++;
-		}
-		if (screen == 3) {
 
-			add.clicked();
-			city.setStateSelected(add.getStateSelected());
-			city.clicked();
-			demand = city.getDemandedEnergy();
-			energyForUse.setIndexator(demand);
+		if (screen == 2) {
+			if (multicast.getTurno() == multicast.turnoAlServidor) {
+				add.clicked();
+				city.setStateSelected(add.getStateSelected());
+				city.clicked();
+				demand = city.getDemandedEnergy();
+				energyForUse.setIndexator(demand);
 
-			energyIndicator.clicked();
-			//To add a notification
-			notifs.addNotif("Holi", 2);
+				energyIndicator.clicked();
+				// To add a notification
+				notifs.addNotif("Holi", 2);
+			}
 		}
 	}
 
@@ -375,7 +406,7 @@ public class World {
 	}
 
 	public void released() {
-		if (screen == 3) {
+		if (screen == 2) {
 
 			happy.released();
 		}

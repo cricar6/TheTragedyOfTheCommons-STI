@@ -7,13 +7,14 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketException;
 
-public class Multicast extends Thread {
+public class Multicast extends Player {
 
 	private InetAddress DIRECCION;
 	private int PUERTO;
 	private MulticastSocket multicastConection;
 	private int id;
 	private boolean identified;
+	public int turnoAlServidor;
 
 	public Multicast() {
 
@@ -59,6 +60,8 @@ public class Multicast extends Thread {
 					// TODO Auto-generated catch block
 
 				}
+				enviar("ImInicial:" + id + ":" + poblacion + ":" + demanda + ":" + energiaGeneral);
+
 				System.out.println("Im player: " + id);
 			}
 
@@ -106,11 +109,46 @@ public class Multicast extends Thread {
 	}
 
 	public void recibirMensajes(String msgReceived) {
-		if (msgReceived.equals("Identify")) {
-			enviar("MyIDIs:" + this.id);
-		}
+		if (identified == true) {
+			if (msgReceived.equals("Identify")) {
+				enviar("MyIDIs:" + this.id);
+			}
+			if (msgReceived.equals("IMCanPlay:true")) {
+				canPlay = true;
+			}
+			if (msgReceived.contains("AsignTurn")) {
 
-		if (identified == false) {
+				 String[] separated = msgReceived.split(":");
+
+				 if (id == Integer.parseInt(separated[1])) {
+
+					 turno = Integer.parseInt(separated[2]);
+					 System.out.println("El turno asignado fue: "+ Integer.parseInt(separated[2]) );
+
+				 }
+
+			}
+
+			if (msgReceived.contains("cambioTurno")) {
+				String[] separated = msgReceived.split(":");
+				int turno = Integer.parseInt(separated[1]);
+				turnoAlServidor = turno;
+			}
+			
+			if (msgReceived.equals("autumn")) {
+				season = 2;
+			}
+			if (msgReceived.equals("winter")) {
+				season = 3;
+			}
+			if (msgReceived.equals("spring")) {
+				season = 4;
+			}
+			if (msgReceived.equals("juegoTerminado")) {
+				season = 0;
+			}
+
+		} else {
 			if (msgReceived.contains("MyIDIs:")) {
 				String[] separate = msgReceived.split(":");
 				int id = Integer.parseInt(separate[1]);
@@ -121,6 +159,30 @@ public class Multicast extends Thread {
 
 		}
 
+	}
+
+	@Override
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+		enviar("IMNombre:" + id + ":" + nombre);
+	}
+
+	@Override
+	public void setPoblacion(int poblacion) {
+		this.poblacion = poblacion;
+		enviar("IMPob:" + id + ":" + poblacion);
+	}
+
+	@Override
+	public void setDemanda(int demanda) {
+		this.demanda = demanda;
+		enviar("IMDem:" + id + ":" + demanda);
+	}
+
+	@Override
+	public void setSeason(int season) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

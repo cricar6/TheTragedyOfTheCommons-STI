@@ -55,11 +55,22 @@ public class Season {
 			element.display();
 			if (element.getState()==seasonSelected) {
 				element.setSelected(true);
+			} else {
+				element.setSelected(false);
 			}
 		}
 		app.popMatrix();
 	
 		
 	}
+
+	public int getSeasonSelected() {
+		return seasonSelected;
+	}
+
+	public void setSeasonSelected(int seasonSelected) {
+		this.seasonSelected = seasonSelected;
+	}
+	
 	
 }

@@ -130,7 +130,7 @@ public class City {
 				}
 			}
 		}
-		System.out.println("houses " + houseTEnergy + "trees" + treeTEnergy);
+		//System.out.println("houses " + houseTEnergy + "trees" + treeTEnergy);
 		return houseTEnergy + treeTEnergy;
 	}
 
