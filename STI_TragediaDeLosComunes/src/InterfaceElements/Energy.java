@@ -17,7 +17,8 @@ public class Energy {
 	private PImage energy;
 	private int demand;
 	private boolean sendNotif = false;
-
+	private int delay;
+	private boolean aumentarDelay = false;
 	private ArrayList<EnergyElement> elements;
 
 	public Energy(int posX, int posY, PApplet app) {
@@ -25,6 +26,8 @@ public class Energy {
 		this.posX = posX;
 		this.posY = posY;
 
+		delay = 0;
+		
 		size = 70;
 		elements = new ArrayList<EnergyElement>();
 		
@@ -63,6 +66,14 @@ public class Energy {
 		app.tint(255,255);
 
 
+		if (aumentarDelay == true) {
+			delay++;
+			canSelect=false;
+			if (delay == 30) {
+				aumentarDelay=false;
+				delay=0;
+			}
+		}
 	}
 
 	public void moved() {
@@ -81,27 +92,32 @@ public class Energy {
 				}	
 			}	
 		}
-		for (int i = 0; i < elements.size(); i++) {
-			EnergyElement element = elements.get(i);
+		
+		if (canSelect == true) {
 			
-			if (element.isVisible()==true) {
-				if (app.dist(app.mouseX, app.mouseY, element.getPosX(), element.getPosY())< element.getSize()) {
-					element.setSelected(true);
-					
-					energySelected = element.getState();
-					
-					if (energySelected==1) energyGiven = (int) (demand * 0.25);
-					if (energySelected==2) energyGiven = (int) (demand * 0.50);
-					if (energySelected==3) energyGiven = (int) (demand * 1);
-					if (energySelected==4) energyGiven = (int) (demand * 2);
+			for (int i = 0; i < elements.size(); i++) {
+				EnergyElement element = elements.get(i);
+				
+				if (element.isVisible()==true) {
+					if (app.dist(app.mouseX, app.mouseY, element.getPosX(), element.getPosY())< element.getSize()) {
+						element.setSelected(true);
+						
+						energySelected = element.getState();
+						
+						if (energySelected==1) energyGiven = (int) (demand * 0.25);
+						if (energySelected==2) energyGiven = (int) (demand * 0.50);
+						if (energySelected==3) energyGiven = (int) (demand * 1);
+						if (energySelected==4) energyGiven = (int) (demand * 2);
 
-					sendNotif = true;
-					canSelect = false;
-					element.setSelected(false);
+						sendNotif = true;
+						canSelect = false;
+						element.setSelected(false);
+					}
 				}
-			}
 
+			}
 		}
+
 	}
 
 	public boolean isCanSelect() {

@@ -15,9 +15,10 @@ public class Multicast extends Player {
 	private int id;
 	private boolean identified;
 	public int turnoAlServidor;
+	public int energiaSolicitada;
 
 	public Multicast() {
-
+		energiaSolicitada = 0;
 	}
 
 	@Override
@@ -117,16 +118,18 @@ public class Multicast extends Player {
 				canPlay = true;
 			}
 			if (msgReceived.contains("AsignTurn")) {
+				String[] separated = msgReceived.split(":");
+				if (id == Integer.parseInt(separated[1])) {
+					turno = Integer.parseInt(separated[2]);
+					System.out.println("El turno asignado fue: " + Integer.parseInt(separated[2]));
+				}
+			}
 
-				 String[] separated = msgReceived.split(":");
-
-				 if (id == Integer.parseInt(separated[1])) {
-
-					 turno = Integer.parseInt(separated[2]);
-					 System.out.println("El turno asignado fue: "+ Integer.parseInt(separated[2]) );
-
-				 }
-
+			if (msgReceived.contains("Solicitado")) {
+				String[] separated = msgReceived.split(":");
+				if (id == Integer.parseInt(separated[1])) {
+					energiaSolicitada = Integer.parseInt(separated[2]);
+				}
 			}
 
 			if (msgReceived.contains("cambioTurno")) {
@@ -134,7 +137,7 @@ public class Multicast extends Player {
 				int turno = Integer.parseInt(separated[1]);
 				turnoAlServidor = turno;
 			}
-			
+
 			if (msgReceived.equals("autumn")) {
 				season = 2;
 			}
@@ -149,12 +152,12 @@ public class Multicast extends Player {
 			}
 			if (msgReceived.contains("EnergyByRound")) {
 				String[] separate = msgReceived.split(":");
-				pasiveEnergy = Integer.parseInt(separate [1]);
+				pasiveEnergy = Integer.parseInt(separate[1]);
 			}
 			if (msgReceived.contains("EnergyByRound")) {
 				String[] separate = msgReceived.split(":");
-				pasiveEnergy = Integer.parseInt(separate [1]);
-			}			
+				pasiveEnergy = Integer.parseInt(separate[1]);
+			}
 			if (msgReceived.contains("notif")) {
 				String[] separate = msgReceived.split(":");
 				String name = separate[1];
@@ -162,7 +165,6 @@ public class Multicast extends Player {
 				String newNotif = name + " : " + notif;
 				notif = newNotif;
 			}
-			
 
 		} else {
 			if (msgReceived.contains("MyIDIs:")) {
@@ -200,7 +202,7 @@ public class Multicast extends Player {
 		this.energiaGeneral = energy;
 		enviar("IMEne:" + id + ":" + energy);
 	}
-	
+
 	public void notifyPlayers(String notif) {
 		enviar("notif:" + nombre + ":" + notif);
 	}
@@ -208,7 +210,7 @@ public class Multicast extends Player {
 	@Override
 	public void setSeason(int season) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public int getTurnoAlServidor() {
@@ -218,18 +220,30 @@ public class Multicast extends Player {
 	public void setTurnoAlServidor(int turnoAlServidor) {
 		this.turnoAlServidor = turnoAlServidor;
 	}
-	
+
 	@Override
 	public void setEnvironmental(int environmental) {
 		this.environmental = environmental;
 		enviar("IMEnv:" + id + ":" + environmental);
 	}
-	
+
 	@Override
 	public void setFelicidad(int felicidad) {
 		this.felicidad = felicidad;
 		enviar("IMFel:" + id + ":" + felicidad);
 	}
-	
 
+	public void solicitarEnergia(int energiaASolicitar) {
+		enviar("Solicitar:" + id + ":" + energiaASolicitar);
+	}
+
+	public int getEnergiaSolicitada() {
+		return energiaSolicitada;
+	}
+
+	public void setEnergiaSolicitada(int energiaSolicitada) {
+		this.energiaSolicitada = energiaSolicitada;
+	}
+
+	
 }

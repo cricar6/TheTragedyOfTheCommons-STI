@@ -72,7 +72,7 @@ public class World {
 	public Multicast multicast;
 
 	private boolean alive;
-
+	
 	public World(PApplet app) {
 		this.app = app;
 		teko = app.createFont("./resources/fonts/teko-regular.otf", 120);
@@ -158,7 +158,7 @@ public class World {
 	int tempPopulation, tempDemand, environmental;
 	int temTurn;
 	String temNotif;
-
+	int temEnergiaSolicitada;
 	public void display() {
 
 		// variable changer
@@ -279,6 +279,11 @@ public class World {
 			break;
 		case 2:
 
+			if (multicast.getEnergiaSolicitada()!=temEnergiaSolicitada) {
+				finalEnergy = finalEnergy + multicast.getEnergiaSolicitada();
+			}
+			
+			temEnergiaSolicitada = multicast.getEnergiaSolicitada();
 			// Interface display
 			city.display();
 
@@ -389,7 +394,13 @@ public class World {
 		}
 		
 		multicast.setEnergy(finalEnergy);
-		happiness = happiness + happinessThisTurn;
+		if (population != 0) {
+			happiness = happiness + (happinessThisTurn/population + (energyByEnvironment)) - deads;
+				
+		} else {
+			happiness = happiness + (energyByEnvironment - deads);
+		}
+		
 		multicast.setFelicidad(happiness);
 		System.out.println();
 		System.out.println(happiness + " happiness " + happinessThisTurn + "happinessthisturn");
@@ -467,8 +478,11 @@ public class World {
 				if (energyIndicator.isSendNotif() == true) {
 					
 					multicast.notifyPlayers("Se ha añadido " + energyIndicator.getEnergyGiven() + " de energía.");
-
-					finalEnergy = finalEnergy + energyIndicator.getEnergyGiven();
+					
+					multicast.solicitarEnergia(energyIndicator.getEnergyGiven());
+					//CHECK IT
+					//finalEnergy = finalEnergy + energyIndicator.getEnergyGiven();
+					
 					energyIndicator.setSendNotif(false);
 					
 				}
