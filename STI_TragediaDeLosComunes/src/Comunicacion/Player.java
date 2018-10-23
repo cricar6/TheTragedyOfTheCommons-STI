@@ -4,7 +4,7 @@ public abstract class Player extends Thread {
 
 	protected int poblacion, felicidad, demanda;
 	protected String nombre;
-	protected int season, energiaGeneral, turno, pasiveEnergy;
+	protected int season, energiaGeneral, turno, pasiveEnergy, environmental;
 	protected String notificacion;
 	protected boolean canPlay = false;
 
@@ -29,6 +29,8 @@ public abstract class Player extends Thread {
 	public abstract void setSeason(int season);
 	public abstract void setEnergy (int energy);
 	public abstract void notifyPlayers(String notif) ;
+	public abstract void setEnvironmental (int environmental);
+	public abstract void setFelicidad (int felicidad);
 	
 	public boolean isCanPlay() {
 		return canPlay;

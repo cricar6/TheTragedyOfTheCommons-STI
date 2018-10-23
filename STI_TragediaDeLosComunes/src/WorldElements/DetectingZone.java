@@ -10,6 +10,8 @@ public class DetectingZone {
 	private int energyCanUse;
 	private boolean ocupied;
 
+	private int treesPositioned;
+
 	public DetectingZone(int posX, int posY, int size, PApplet app) {
 		this.posX = posX;
 		this.posY = posY;
@@ -23,11 +25,11 @@ public class DetectingZone {
 
 		energyCanUse = 0;
 
-		ocupied= false;
+		ocupied = false;
 	}
 
 	public void display() {
-		
+
 		app.rect(0, 0, size, size);
 		app.noStroke();
 		app.fill(r, g, b);
@@ -49,8 +51,8 @@ public class DetectingZone {
 		app.scale(1f, 0.58f);
 		app.rotate(app.radians(45));
 
-		if (ocupied == false && stateSelected !=0) {
-			
+		if (ocupied == false && stateSelected != 0) {
+
 			if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
 				state = 3;
 
@@ -60,7 +62,6 @@ public class DetectingZone {
 
 		}
 
-
 		app.popMatrix();
 
 	}
@@ -69,9 +70,18 @@ public class DetectingZone {
 
 		System.out.println(energyCanUse);
 
-		if (energyCanUse>=50) {
+		if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied == false) {
 
-			if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied==false) {
+			if (stateSelected == 2) {
+				ocupied = true;
+				state = stateSelected;
+				treesPositioned++;
+			}
+		}
+
+		if (energyCanUse >= 50) {
+
+			if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied == false) {
 
 				ocupied = true;
 				state = stateSelected;
@@ -109,9 +119,13 @@ public class DetectingZone {
 		this.ocupied = ocupied;
 	}
 
+	public int getTreesPositioned() {
+		return treesPositioned;
+	}
 
+	public void setTreesPositioned(int treesPositioned) {
+		this.treesPositioned = treesPositioned;
+	}
 
 	
-	
-
 }

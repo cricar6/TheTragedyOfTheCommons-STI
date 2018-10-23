@@ -16,6 +16,8 @@ public class City {
 	private int evironmentalEnergy;
 	private int population;
 	private int housePrice, treePrice;
+	private int treeLimit;
+	private int treesPositioned;
 
 	public City(int cols, int rows, int size, int housePrice, int treePrice, PApplet app) {
 		boolean contador = false;
@@ -26,6 +28,9 @@ public class City {
 
 		this.housePrice = housePrice;
 		this.treePrice = treePrice;
+
+		treeLimit = 1;
+		treesPositioned = 0;
 
 		squares = new ArrayList<Square>();
 		energyCanUse = 0;
@@ -53,11 +58,19 @@ public class City {
 
 		// System.out.println(demandedEnergy);
 
+		
+			
 		for (int i = 0; i < squares.size(); i++) {
 			Square square = squares.get(i);
 			square.display();
 			square.setEnergyCanUse(energyCanUse);
+			if (treesPositioned != 0)
+				square.setTreesPositioned(0);
+			if (treesPositioned == 0)
+				treesPositioned += square.getTreesPositioned();
 		}
+		
+		
 
 	}
 
@@ -74,13 +87,22 @@ public class City {
 
 		// System.out.println("fnal" + demandedEnergy);
 
-		for (int i = 0; i < squares.size(); i++) {
-			Square square = squares.get(i);
-			square.setStateSelected(stateSelected);
+		if (treesPositioned == 0) {
 
-			square.clicked();
+			for (int i = 0; i < squares.size(); i++) {
+				Square square = squares.get(i);
+				square.setStateSelected(stateSelected);
+				square.clicked();
 
+			}
 		}
+
+		demandedEnergy = 0;
+		demandedEnergy = calculateDemand(housePrice);
+		evironmentalEnergy = calculateEnvironmentEnergy(treePrice);
+
+		population = calculatePopulation(5);
+
 		Collections.sort(squares, new Comparator<Square>() {
 
 			@Override
@@ -94,12 +116,6 @@ public class City {
 			}
 
 		});
-
-		demandedEnergy = 0;
-		demandedEnergy = calculateDemand(housePrice);
-		evironmentalEnergy = calculateEnvironmentEnergy(treePrice);
-
-		population = calculatePopulation(5);
 
 	}
 
@@ -218,6 +234,14 @@ public class City {
 
 	public void setEvironmentalEnergy(int evironmentalEnergy) {
 		this.evironmentalEnergy = evironmentalEnergy;
+	}
+
+	public int getTreesPositioned() {
+		return treesPositioned;
+	}
+
+	public void setTreesPositioned(int treesPositioned) {
+		this.treesPositioned = treesPositioned;
 	}
 
 }

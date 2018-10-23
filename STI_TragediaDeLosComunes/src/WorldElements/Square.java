@@ -16,6 +16,8 @@ public class Square {
 	private int energyCanUse;
 
 	private boolean ocupied;
+	
+	private int treesPositioned;
 
 	public Square(int posX, int posY, int size, PApplet app) {
 		this.posX = posX;
@@ -47,6 +49,12 @@ public class Square {
 			detectZone.setOcupied(ocupied);
 		}
 
+		if (treesPositioned != 0) {
+			detectZone.setTreesPositioned(0);
+		}
+		if (treesPositioned == 0)
+		treesPositioned = detectZone.getTreesPositioned();
+		
 		temstate = state;
 		detectZone.setEnergyCanUse(energyCanUse);
 		app.pushMatrix();
@@ -189,4 +197,13 @@ public class Square {
 		this.state = state;
 	}
 
+	public int getTreesPositioned() {
+		return treesPositioned;
+	}
+
+	public void setTreesPositioned(int treesPositioned) {
+		this.treesPositioned = treesPositioned;
+	}
+
+	
 }

@@ -104,11 +104,11 @@ public class World {
 		population = 0;
 		deads = 0;
 		demand = 0;
-		happiness = 50;
+		happiness = 0;
 		happinessThisTurn = 0;
 		season = 1;
 		housePrice = happinessThisTurn;
-		treePrice = 30;
+		treePrice = 1;
 
 		minSummer = 25;
 		minAutumn = 15;
@@ -155,7 +155,7 @@ public class World {
 		multicast.getData(population, demand, finalEnergy);
 	}
 
-	int tempPopulation, tempDemand;
+	int tempPopulation, tempDemand, environmental;
 	int temTurn;
 	String temNotif;
 
@@ -164,6 +164,13 @@ public class World {
 		// variable changer
 
 		energyByEnvironment = city.getEvironmentalEnergy();
+		if (environmental != energyByEnvironment) {
+			multicast.setEnvironmental(energyByEnvironment);
+		}
+		
+		environmental = energyByEnvironment;
+		
+		
 		city.setEnergyCanUse(finalEnergy);
 		city.setDemandedEnergy(demand);
 		population = city.getPopulation();
@@ -347,6 +354,9 @@ public class World {
 		pasiveEnergy = multicast.getPasiveEnergy();
 		finalEnergy = finalEnergy + pasiveEnergy;
 
+		add.setChoose(0);
+		add.setStateSelected(0);
+		city.setTreesPositioned(0);
 	}
 
 	public void endTurn() {
@@ -365,7 +375,7 @@ public class World {
 			city.setPopulation(population);
 			city.deleteHouses(populationDead);
 
-			System.out.println("deads" + deads);
+			//System.out.println("deads" + deads);
 
 			finalEnergy = finalEnergy - demand;
 
@@ -377,8 +387,12 @@ public class World {
 		if (finalEnergy < 0) {
 			finalEnergy = 0;
 		}
+		
 		multicast.setEnergy(finalEnergy);
-		// Notificar al servidor de que le va a dar energia
+		happiness = happiness + happinessThisTurn;
+		multicast.setFelicidad(happiness);
+		System.out.println();
+		System.out.println(happiness + " happiness " + happinessThisTurn + "happinessthisturn");
 		timer.setStop(true);
 		timer.restart();
 	}
@@ -397,8 +411,8 @@ public class World {
 			if (app.key == 'p') {
 				multicast.enviar("termine");
 				endTurn();
-				System.out.println(multicast.getTurno());
-				System.out.println(multicast.turnoAlServidor);
+				//System.out.println(multicast.getTurno());
+				//System.out.println(multicast.turnoAlServidor);
 			}
 		}
 

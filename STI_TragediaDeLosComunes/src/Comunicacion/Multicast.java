@@ -219,6 +219,17 @@ public class Multicast extends Player {
 		this.turnoAlServidor = turnoAlServidor;
 	}
 	
+	@Override
+	public void setEnvironmental(int environmental) {
+		this.environmental = environmental;
+		enviar("IMEnv:" + id + ":" + environmental);
+	}
+	
+	@Override
+	public void setFelicidad(int felicidad) {
+		this.felicidad = felicidad;
+		enviar("IMFel:" + id + ":" + felicidad);
+	}
 	
 
 }

@@ -12,7 +12,7 @@ public class AddNewElement {
 	private int size, elementsSize;
 	private PApplet app;
 	private ArrayList<AddElements> elements;
-
+	private int choose;
 	private int stateSelected;
 
 	private PImage add;
@@ -31,6 +31,7 @@ public class AddNewElement {
 
 		stateSelected = 0;
 		
+		choose = 0;
 		add = app.loadImage("/resources/add.png");
 
 
@@ -41,27 +42,35 @@ public class AddNewElement {
 		app.ellipse(posX, posY, size, size);
 		app.image(add, posX, posY, size-35, size-35);
 
-		for (int i = 0; i < elements.size(); i++) {
-			AddElements element = elements.get(i);
-			element.display();
+		if (choose == 0) {
+			
+			for (int i = 0; i < elements.size(); i++) {
+				AddElements element = elements.get(i);
+				element.display();
+			}
 		}
 
 	}
 
 	public void clicked() {
-		for (int i = 0; i < elements.size(); i++) {
-			AddElements element = elements.get(i);
-			System.out.println(app.dist(app.mouseX, app.mouseY, element.getPosX(), element.getPosY()));
-			if (app.dist(app.mouseX, app.mouseY, element.getPosX(), element.getPosY()) < 50) {
-
-				if (element.getKind() == 1) {
-					System.out.println("AddNewElement: State 1");
-					stateSelected = 1;
-				}
-
-				if (element.getKind() == 2) {
-					System.out.println("AddNewElement: State 2");
-					stateSelected = 2;
+		if (choose == 0) {
+			
+			for (int i = 0; i < elements.size(); i++) {
+				AddElements element = elements.get(i);
+				System.out.println(app.dist(app.mouseX, app.mouseY, element.getPosX(), element.getPosY()));
+				if (app.dist(app.mouseX, app.mouseY, element.getPosX(), element.getPosY()) < 50) {
+					
+					if (element.getKind() == 1) {
+						System.out.println("AddNewElement: State 1");
+						stateSelected = 1;
+						choose = 1;
+					}
+					
+					if (element.getKind() == 2) {
+						System.out.println("AddNewElement: State 2");
+						stateSelected = 2;
+						choose = 2;
+					}
 				}
 			}
 		}
@@ -75,4 +84,13 @@ public class AddNewElement {
 		this.stateSelected = stateSelected;
 	}
 
+	public int getChoose() {
+		return choose;
+	}
+
+	public void setChoose(int choose) {
+		this.choose = choose;
+	}
+
+	
 }

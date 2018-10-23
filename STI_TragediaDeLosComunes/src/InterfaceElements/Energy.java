@@ -40,7 +40,7 @@ public class Energy {
 	}
 
 	public void display() {
-		System.out.println(canSelect);
+		//System.out.println(canSelect);
 		app.tint(255,255);
 		for (int i = 0; i < elements.size(); i++) {
 			EnergyElement element = elements.get(i);
