@@ -83,7 +83,7 @@ public class World {
 		screen = 0;
 		alive = true;
 		turno = 0;
-		maxTime = 20;
+		maxTime = 60;
 		// Splash
 		backgrounds = new PImage[3];
 		for (int i = 0; i < backgrounds.length; i++) {

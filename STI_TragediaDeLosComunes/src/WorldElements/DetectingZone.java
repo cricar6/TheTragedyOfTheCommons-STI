@@ -14,9 +14,8 @@ public class DetectingZone {
 	private boolean ocupied;
 
 	private int treesPositioned;
-	
-	private ArrayList<NotificationText> notifs;
 
+	private ArrayList<NotificationText> notifs;
 
 	public DetectingZone(int posX, int posY, int size, PApplet app) {
 		this.posX = posX;
@@ -32,7 +31,7 @@ public class DetectingZone {
 		energyCanUse = 0;
 
 		ocupied = false;
-		
+
 		notifs = new ArrayList<NotificationText>();
 
 	}
@@ -40,7 +39,7 @@ public class DetectingZone {
 	public void addNotif(String notification) {
 		notifs.add(new NotificationText(posX, posY, notification, app));
 	}
-	
+
 	public void display() {
 
 		for (int i = 0; i < notifs.size(); i++) {
@@ -50,7 +49,7 @@ public class DetectingZone {
 				notifs.remove(notif);
 			}
 		}
-		
+
 		app.rect(0, 0, size, size);
 		app.noStroke();
 		app.fill(r, g, b);
@@ -74,7 +73,7 @@ public class DetectingZone {
 
 		if (ocupied == false && stateSelected != 0) {
 			if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
-				if (stateSelected ==1 ) {
+				if (stateSelected == 1) {
 					state = 6;
 				} else if (stateSelected == 2) {
 					state = 7;
@@ -97,30 +96,26 @@ public class DetectingZone {
 
 			if (stateSelected == 2) {
 				ocupied = true;
-				
-				state = (int) app.random(4,6);
-				
-				treesPositioned++;
-				
-				//app.text("Has puesto un arbol", app.width / 2, app.height - 110);
-				notifs.add(new NotificationText(app.width / 2,  app.height - 80, "Has puesto un arbol", app));
 
-				
+				state = (int) app.random(4, 6);
+
+				treesPositioned++;
+
+				// app.text("Has puesto un arbol", app.width / 2, app.height - 110);
+				notifs.add(new NotificationText(app.width / 2, app.height - 80, "Has puesto un arbol", app));
+
 			}
 		}
 
-		if (energyCanUse >= 50) {
+		if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied == false) {
 
-			if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied == false) {
+			ocupied = true;
 
-				ocupied = true;
-				
-				state = (int) app.random(1,4);
+			state = (int) app.random(1, 4);
 
-				notifs.add(new NotificationText(app.width / 2,  app.height - 80, "QUEJESTO", app));
-				//app.text("Deberia crear algo aqui", app.width / 2, app.height - 110);
+			notifs.add(new NotificationText(app.width / 2, app.height - 80, "QUEJESTO", app));
+			// app.text("Deberia crear algo aqui", app.width / 2, app.height - 110);
 
-			}
 		}
 
 	}
@@ -161,5 +156,4 @@ public class DetectingZone {
 		this.treesPositioned = treesPositioned;
 	}
 
-	
 }
