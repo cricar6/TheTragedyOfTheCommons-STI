@@ -83,7 +83,7 @@ public class World {
 		screen = 0;
 		alive = true;
 		turno = 0;
-		maxTime = 60;
+		maxTime = 20;
 		// Splash
 		backgrounds = new PImage[3];
 		for (int i = 0; i < backgrounds.length; i++) {
@@ -282,8 +282,7 @@ public class World {
 			break;
 		case 2:
 			app.pushStyle();
-			app.imageMode(app.CORNER);
-			app.image(waitingImage, 0, 0);
+			app.image(waitingImage, app.width/2, app.height/2);
 			// app.imageMode(app.CENTER);
 			app.textFont(bebas);
 			app.textSize(100);
@@ -419,8 +418,6 @@ public class World {
 		if (population != 0) {
 			happiness = happiness + (happinessThisTurn / population + (energyByEnvironment)) - deads;
 
-		} else {
-			happiness = happiness + (energyByEnvironment - deads);
 		}
 
 		multicast.setFelicidad(happiness);
