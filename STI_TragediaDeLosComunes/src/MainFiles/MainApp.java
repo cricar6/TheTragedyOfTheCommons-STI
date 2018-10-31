@@ -12,6 +12,7 @@ public class MainApp extends PApplet {
 	
 	@Override 
 	public void settings() {
+		//fullScreen(P3D);
 		size (1200, 700, P3D);
 	}
 	

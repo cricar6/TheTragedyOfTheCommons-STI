@@ -1,5 +1,8 @@
 package WorldElements;
 
+import java.util.ArrayList;
+
+import InterfaceElements.NotificationText;
 import processing.core.PApplet;
 
 public class DetectingZone {
@@ -11,25 +14,43 @@ public class DetectingZone {
 	private boolean ocupied;
 
 	private int treesPositioned;
+	
+	private ArrayList<NotificationText> notifs;
+
 
 	public DetectingZone(int posX, int posY, int size, PApplet app) {
 		this.posX = posX;
 		this.posY = posY;
 		this.size = size;
 		this.app = app;
-		r = 240;
-		g = 240;
-		b = 240;
+		r = 184;
+		g = 188;
+		b = 188;
 		state = 0;
 		stateSelected = 0;
 
 		energyCanUse = 0;
 
 		ocupied = false;
+		
+		notifs = new ArrayList<NotificationText>();
+
 	}
 
+	public void addNotif(String notification) {
+		notifs.add(new NotificationText(posX, posY, notification, app));
+	}
+	
 	public void display() {
 
+		for (int i = 0; i < notifs.size(); i++) {
+			NotificationText notif = notifs.get(i);
+			notif.display();
+			if (notif.getOpacity() <= 0) {
+				notifs.remove(notif);
+			}
+		}
+		
 		app.rect(0, 0, size, size);
 		app.noStroke();
 		app.fill(r, g, b);
@@ -52,10 +73,12 @@ public class DetectingZone {
 		app.rotate(app.radians(45));
 
 		if (ocupied == false && stateSelected != 0) {
-
 			if (app.dist(posX, posY, app.mouseX, app.mouseY) < size - 60) {
-				state = 3;
-
+				if (stateSelected ==1 ) {
+					state = 6;
+				} else if (stateSelected == 2) {
+					state = 7;
+				}
 			} else {
 				state = 0;
 			}
@@ -74,8 +97,15 @@ public class DetectingZone {
 
 			if (stateSelected == 2) {
 				ocupied = true;
-				state = stateSelected;
+				
+				state = (int) app.random(4,6);
+				
 				treesPositioned++;
+				
+				//app.text("Has puesto un arbol", app.width / 2, app.height - 110);
+				notifs.add(new NotificationText(app.width / 2,  app.height - 80, "Has puesto un arbol", app));
+
+				
 			}
 		}
 
@@ -84,7 +114,11 @@ public class DetectingZone {
 			if (app.dist(posX, posY, app.mouseX, app.mouseY) <= size - 60 && ocupied == false) {
 
 				ocupied = true;
-				state = stateSelected;
+				
+				state = (int) app.random(1,4);
+
+				notifs.add(new NotificationText(app.width / 2,  app.height - 80, "QUEJESTO", app));
+				//app.text("Deberia crear algo aqui", app.width / 2, app.height - 110);
 
 			}
 		}

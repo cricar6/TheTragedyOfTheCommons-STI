@@ -12,6 +12,7 @@ public class Season {
 	private int elementSize;
 	private int seasonSelected;
 	private ArrayList<SeasonElement> elements;
+	private int time;
 
 	public Season (int posX, int posY, int seasonSelected, PApplet app) {
 		this.app = app;
@@ -47,6 +48,11 @@ public class Season {
 		app.textSize(20);
 		app.fill(255);
 		app.text("ESTACIONES", +15, 0);
+		
+		app.textSize(50);
+		app.fill(37,57,73);
+		app.text(time, -sizeX/2-45 , (sizeY/2)+17);
+
 		app.rectMode(app.CENTER);
 
 		
@@ -71,6 +77,16 @@ public class Season {
 	public void setSeasonSelected(int seasonSelected) {
 		this.seasonSelected = seasonSelected;
 	}
+
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
+	
+	
 	
 	
 }

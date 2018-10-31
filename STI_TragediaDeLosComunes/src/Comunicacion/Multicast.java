@@ -166,6 +166,7 @@ public class Multicast extends Player {
 				notif = newNotif;
 			}
 
+
 		} else {
 			if (msgReceived.contains("MyIDIs:")) {
 				String[] separate = msgReceived.split(":");

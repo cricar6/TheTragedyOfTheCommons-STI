@@ -136,7 +136,8 @@ public class City {
 			Square square = squares.get(i);
 
 			if (square.isOcupied() == true) {
-				if (square.getState() == 1) {
+				//Los estados de las casas
+				if (square.getState() == 1 || square.getState() == 2 || square.getState() == 3) {
 					square.restartVars();
 				}
 			}
@@ -151,7 +152,9 @@ public class City {
 			Square square = squares.get(i);
 
 			if (square.isOcupied() == true) {
-				if (square.getState() == 1) {
+				//Los estados de las casas
+
+				if (square.getState() == 1 || square.getState() == 2 || square.getState() == 3) {
 					houseQ++;
 				}
 			}
@@ -179,7 +182,9 @@ public class City {
 			Square square = squares.get(i);
 
 			if (square.isOcupied() == true) {
-				if (square.getState() == 2) {
+				//Los estados de los arboles
+
+				if (square.getState() == 4 || square.getState() == 5 ) {
 					treeTEnergy += treePrice;
 				}
 			}

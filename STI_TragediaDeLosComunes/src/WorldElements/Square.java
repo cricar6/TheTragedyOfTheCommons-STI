@@ -31,7 +31,7 @@ public class Square {
 		detectZone = new DetectingZone(posX, posY, size, app);
 
 		state = 0;
-		states = new PImage[3];
+		states = new PImage[6];
 		for (int i = 0; i < states.length; i++) {
 			states[i] = app.loadImage("/resources/" + i + ".png");
 		}
@@ -72,10 +72,11 @@ public class Square {
 		switch (state) {
 		case 0:
 			// println ("nothing");
+			
 
 			break;
 		case 1:
-			// println ("house");
+			// println ("house1");
 			app.imageMode(app.CENTER);
 
 			app.pushMatrix();
@@ -87,8 +88,10 @@ public class Square {
 			app.popMatrix();
 
 			break;
-		case 2:
-			// println ("tree");
+			
+
+		case 2: 
+			// println ("house2");
 
 			app.imageMode(app.CENTER);
 
@@ -96,26 +99,58 @@ public class Square {
 			app.translate(posX, posY - 12);
 			app.scale(.233f);
 
-			app.tint(255, 255);
 			app.image(states[2], 0, 0);
-			app.tint(255, 255);
 
 			app.popMatrix();
+
 			break;
+	
 		case 3:
+			// println ("house3");
+
 			app.imageMode(app.CENTER);
 
 			app.pushMatrix();
 			app.translate(posX, posY - 12);
 			app.scale(.233f);
 
-			app.tint(255, 100);
-			app.image(states[1], 0, 0);
-			app.tint(255, 255);
+			app.image(states[3], 0, 0);
 
 			app.popMatrix();
+
 			break;
 		case 4:
+			// println ("tree1");
+
+			app.imageMode(app.CENTER);
+
+			app.pushMatrix();
+			app.translate(posX, posY - 12);
+			app.scale(.233f);
+
+			app.tint(255, 255);
+			app.image(states[4], 0, 0);
+			app.tint(255, 255);
+
+			app.popMatrix();
+			break;
+
+		case 5:
+			// println ("tree2");
+
+			app.imageMode(app.CENTER);
+
+			app.pushMatrix();
+			app.translate(posX, posY - 12);
+			app.scale(.233f);
+
+			app.image(states[5], 0, 0);
+
+			app.popMatrix();
+
+			break;
+
+		case 6:
 			app.imageMode(app.CENTER);
 
 			app.pushMatrix();
@@ -123,7 +158,20 @@ public class Square {
 			app.scale(.233f);
 
 			app.tint(255, 100);
-			app.image(states[2], 0, 0);
+			app.image(states[1], 0, 0);
+			app.tint(255, 255);
+
+			app.popMatrix();
+			break;
+		case 7:
+			app.imageMode(app.CENTER);
+
+			app.pushMatrix();
+			app.translate(posX, posY - 12);
+			app.scale(.233f);
+
+			app.tint(255, 100);
+			app.image(states[4], 0, 0);
 			app.tint(255, 255);
 
 			app.popMatrix();
